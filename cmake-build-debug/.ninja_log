@@ -1,0 +1,17 @@
+# ninja log v5
+4	317	1699863980682226161	CMakeFiles/ServerM.dir/serverM.cpp.o	f5cebb1aa7d8b87c
+0	314	1699862842774798026	CMakeFiles/Client.dir/client.cpp.o	88a3ef6c80256eae
+318	349	1699863980716806193	ServerM	c935b034fa5a9117
+314	346	1699862842808421635	Client	9660e956669a0daf
+1	513	1698973557389484613	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/main.cpp.o	e6134f6732b3f667
+6	607	1699861878618586636	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/client.cpp.o	1d79d431df61b715
+1	207	1698973557083506839	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverL.cpp.o	7be0e542e402d48d
+5	606	1699861878616953394	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverM.cpp.o	f7f13068b2d39295
+1	207	1698973557083506714	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverH.cpp.o	334b3af2234f709f
+0	60	1699866227634998754	build.ninja	76188c2e5ad2ed0a
+1	207	1698973557083474380	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverS.cpp.o	3a9aea6d30d8432c
+1	61	1699866227634998754	build.ninja	76188c2e5ad2ed0a
+5	866	1699866228506620243	CMakeFiles/ServerM.dir/serverM.cpp.o	f5cebb1aa7d8b87c
+866	1028	1699866228668430026	ServerM	c935b034fa5a9117
+4	398	1699866235957881632	CMakeFiles/Client.dir/client.cpp.o	88a3ef6c80256eae
+399	434	1699866235993897232	Client	9660e956669a0daf
