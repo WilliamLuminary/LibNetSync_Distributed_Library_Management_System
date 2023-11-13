@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 # target_link_libraries(Client some_library)
 
 add_executable(ServerM serverM.cpp)
-
 add_executable(Client client.cpp)
-
 add_executable(ServerS serverS.cpp)
+add_executable(ServerL serverL.cpp)
+add_executable(ServerH serverH.cpp)

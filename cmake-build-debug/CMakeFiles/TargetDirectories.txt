@@ -1,5 +1,7 @@
 /Users/william/Library/Mobile Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/cmake-build-debug/CMakeFiles/ServerM.dir
 /Users/william/Library/Mobile Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/cmake-build-debug/CMakeFiles/Client.dir
 /Users/william/Library/Mobile Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/cmake-build-debug/CMakeFiles/ServerS.dir
+/Users/william/Library/Mobile Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/cmake-build-debug/CMakeFiles/ServerL.dir
+/Users/william/Library/Mobile Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/cmake-build-debug/CMakeFiles/ServerH.dir
 /Users/william/Library/Mobile Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/cmake-build-debug/CMakeFiles/edit_cache.dir
 /Users/william/Library/Mobile Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -17,8 +17,8 @@
 
 const char* LOCALHOST_IP = "127.0.0.1";
 const int LAST_3_DIGITS_YAXING_LI_USC_ID = 475;
-const int DEFAULT_UDP_PORT = 44000 + LAST_3_DIGITS_YAXING_LI_USC_ID;
-const int DEFAULT_TCP_PORT = 45000 + LAST_3_DIGITS_YAXING_LI_USC_ID;
+const int SERVER_M_UDP_PORT = 44000 + LAST_3_DIGITS_YAXING_LI_USC_ID;
+const int SERVER_M_TCP_PORT = 45000 + LAST_3_DIGITS_YAXING_LI_USC_ID;
 const int BUFFER_SIZE = 1024;
 
 int main() {
@@ -32,7 +32,7 @@ int main() {
     // 2. Connect to the server port
     sockaddr_in sock_addr_in{};
     sock_addr_in.sin_family = AF_INET;
-    sock_addr_in.sin_port = htons(DEFAULT_TCP_PORT);
+    sock_addr_in.sin_port = htons(SERVER_M_TCP_PORT);
     if (inet_pton(AF_INET, LOCALHOST_IP, &sock_addr_in.sin_addr) <= 0) {
         std::cerr << "Invalid IP address format." << std::endl;
         close(cfd);
