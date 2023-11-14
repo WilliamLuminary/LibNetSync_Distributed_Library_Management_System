@@ -2,6 +2,8 @@
 // Created by Yaxing Li on 11/2/23.
 //
 
+#include "serverS.h"
+
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
@@ -28,35 +30,11 @@ using std::unordered_map;
 using std::string;
 
 
-const string FILE_PATH = "../";
-const char *LOCALHOST_IP = "127.0.0.1";
-const int LAST_3_DIGITS_YAXING_LI_USC_ID = 475;
-const int SERVER_S_UDP_BASE_PORT = 41000;
-const int SERVER_S_UDP_PORT = SERVER_S_UDP_BASE_PORT + LAST_3_DIGITS_YAXING_LI_USC_ID;
-const int SERVER_M_UDP_BASE_PORT = 44000;
-const int SERVER_M_UDP_PORT = SERVER_M_UDP_BASE_PORT + LAST_3_DIGITS_YAXING_LI_USC_ID;
-const int BUFFER_SIZE = 1024;
-
-
-int initialize_udp_socket(int port);
-
-int send_udp_data(int sockfd, const sockaddr_in &address, const string &data);
-
-int receive_udp_commands(int sockfd);
-
-unordered_map<string, int> read_book_list(const string &filepath);
-
-void print_map(const unordered_map<string, int> &bookStatuses);
-
-string serialize_book_statuses(const unordered_map<string, int> &bookStatuses);
-
-sockaddr_in create_address(int port, const string &ip_address);
-
 int main() {
-    auto bookStatuses = read_book_list(FILE_PATH + "science.txt");
+    auto bookStatuses = read_book_list(FILE_PATH);
 //    print_map(bookStatuses);
 
-    int sockfd = initialize_udp_socket(0); // Port 0 lets the OS choose the port
+    int sockfd = initialize_udp_socket(SERVER_S_UDP_PORT); // Port 0 lets the OS choose the port
     if (sockfd < 0) return 1;
 
     sockaddr_in serverMAddr = create_address(SERVER_M_UDP_PORT, LOCALHOST_IP);
@@ -65,7 +43,6 @@ int main() {
         return 1;
     }
 
-    // Now, Server S switches to server mode to receive commands from ServerM
     if (receive_udp_commands(sockfd) < 0) {
         close(sockfd);
         return 1;
@@ -81,14 +58,18 @@ int initialize_udp_socket(int port) {
         cerr << "Could not create UDP socket: " << strerror(errno) << endl;
         return -1;
     }
+
     sockaddr_in addr = create_address(port, "");
     if (bind(sockfd, reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr)) == -1) {
         cerr << "Bind failed: " << strerror(errno) << endl;
         close(sockfd);
         return -1;
     }
+
+    cout << "Server S is up and running using UDP on port " << port << "." << endl;
     return sockfd;
 }
+
 
 int send_udp_data(int sockfd, const sockaddr_in &address, const string &data) {
     ssize_t sent_bytes = sendto(sockfd, data.c_str(), data.size(), 0,
@@ -97,7 +78,8 @@ int send_udp_data(int sockfd, const sockaddr_in &address, const string &data) {
         cerr << "Sending UDP data failed: " << strerror(errno) << endl;
         return -1;
     }
-    cout << "Sent UDP data to server." << endl;
+    cout << "Server S finished sending the availability status of code " << extract_book_code(data)
+         << " to the Main Server using UDP on port " << ntohs(address.sin_port) << "." << endl;
     return 0;
 }
 
@@ -114,32 +96,7 @@ sockaddr_in create_address(int port, const string &ip_address) {
     return address;
 }
 
-
-unordered_map<string, int> read_book_list() {
-
-    std::ifstream file(FILE_PATH + "science.txt");
-    string line;
-    unordered_map<string, int> bookStatuses;
-
-    if (file.is_open()) {
-        while (std::getline(file, line)) {
-            std::stringstream ss(line);
-            string bookCode;
-            int status;
-            if (getline(ss, bookCode, ',')) {
-                ss.ignore();
-                ss >> status;
-                bookStatuses[bookCode] = status;
-            }
-        }
-        file.close();
-    } else {
-        cerr << "Unable to open file" << endl;
-    }
-    return bookStatuses;
-}
-
-int receive_udp_commands(int sockfd) {
+int receive_udp_commands(int sockfd, unordered_map<string, int> &bookStatuses) {
     char buffer[BUFFER_SIZE];
     struct sockaddr_in caddr{};
     socklen_t caddr_len = sizeof(caddr);
@@ -148,25 +105,69 @@ int receive_udp_commands(int sockfd) {
         ssize_t len = recvfrom(sockfd, buffer, BUFFER_SIZE, 0,
                                reinterpret_cast<struct sockaddr *>(&caddr), &caddr_len);
         if (len > 0) {
-            string command(buffer, len);
-            cout << "Received command: " << command << endl;
+            string receivedData(buffer, len);
+            string bookCode = extract_book_code(receivedData);
+            cout << "Server S received request for book code " << bookCode << " from the Main Server." << endl;
 
-            // TODO: Process the command here
+            // Process the book request and prepare a response
+            string response = process_book_request(bookCode, bookStatuses);
 
-            // Sending a response can be implemented here if necessary
+            // Send the response back to the Main Server
+            if (!response.empty()) {
+                ssize_t sent_bytes = sendto(sockfd, response.c_str(), response.size(), 0,
+                                            reinterpret_cast<const struct sockaddr *>(&caddr), caddr_len);
+                if (sent_bytes < 0) {
+                    cerr << "Sending UDP response failed: " << strerror(errno) << endl;
+                }
+            }
         } else if (len == -1) {
             cerr << "Receiving UDP data failed: " << strerror(errno) << endl;
             if (errno == EINTR) {
-                continue; // Handle interrupted system calls
+                continue;
             }
-            return -1; // An error occurred
+            return -1;
         }
-        // Since UDP is connectionless, a len of 0 does not indicate 'disconnection'
-        // as it would in a stream-oriented protocol like TCP
     }
 
-    return 0; // Never reached unless you add a condition to break the loop
+    return 0;
 }
+
+// Inside the serverS.cpp
+
+string process_book_request(const string &bookCode, unordered_map<string, int> &bookStatuses) {
+    auto it = bookStatuses.find(bookCode);
+    if (it != bookStatuses.end()) {
+        // Found the book code, check availability
+        if (it->second > 0) {
+            // Decrement the count since the book is being checked out
+            it->second -= 1;
+            // Update the book list file with new count here, if necessary
+            update_book_list_file(bookStatuses);
+
+            return "The requested book is available";
+        } else {
+            return "The requested book is not available";
+        }
+    } else {
+        // Book code not found
+        return "Not able to find the book";
+    }
+}
+
+// Call this function after processing each book request to update the book list file.
+void update_book_list_file(const unordered_map<string, int> &bookStatuses) {
+    std::ofstream file(FILE_PATH);
+    if (file.is_open()) {
+        for (const auto &pair : bookStatuses) {
+            file << pair.first << "," << pair.second << std::endl;
+        }
+        file.close();
+    } else {
+        cerr << "Unable to open file at path: " << FILE_PATH << " to update book list." << endl;
+    }
+}
+
+
 
 unordered_map<string, int> read_book_list(const string &filepath) {
     std::ifstream file(filepath);
@@ -187,7 +188,6 @@ unordered_map<string, int> read_book_list(const string &filepath) {
         file.close();
     } else {
         cerr << "Unable to open file at path: " << filepath << endl;
-        // Handle error as necessary
     }
     return bookStatuses;
 }
@@ -204,4 +204,11 @@ string serialize_book_statuses(const unordered_map<string, int> &bookStatuses) {
         serializedData << entry.first << "," << entry.second << "\n";
     }
     return serializedData.str();
+}
+
+string extract_book_code(const string &data) {
+    std::istringstream iss(data);
+    string bookCode;
+    getline(iss, bookCode, ',');
+    return bookCode;
 }

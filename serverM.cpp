@@ -2,7 +2,10 @@
 // Created by Yaxing Li on 11/2/23.
 //
 
+#include "serverM.h"
+
 #include <cstdio>
+#include <fstream>
 #include <sstream>
 #include <cstdlib>
 #include <unistd.h>
@@ -24,219 +27,337 @@ using std::cin;
 using std::unordered_map;
 using std::string;
 using std::strerror;
+using std::ifstream;
+using std::getline;
+using std::istringstream;
 
-
-const int LAST_3_DIGITS_YAXING_LI_USC_ID = 475;
-const int SERVER_S_UDP_BASE_PORT = 41000;
-const int SERVER_S_UDP_PORT = SERVER_S_UDP_BASE_PORT + LAST_3_DIGITS_YAXING_LI_USC_ID;
-const int SERVER_L_UDP_BASE_PORT = 42000;
-const int SERVER_L_UDP_PORT = SERVER_L_UDP_BASE_PORT + LAST_3_DIGITS_YAXING_LI_USC_ID;
-const int SERVER_H_UDP_BASE_PORT = 43000;
-const int SERVER_H_UDP_PORT = SERVER_H_UDP_BASE_PORT + LAST_3_DIGITS_YAXING_LI_USC_ID;
-const int SERVER_M_UDP_BASE_PORT = 44000;
-const int SERVER_M_UDP_PORT = SERVER_M_UDP_BASE_PORT + LAST_3_DIGITS_YAXING_LI_USC_ID;
-const int SERVER_M_TCP_BASE_PORT = 45000;
-const int SERVER_M_TCP_PORT = SERVER_M_TCP_BASE_PORT + LAST_3_DIGITS_YAXING_LI_USC_ID;
-const int LISTEN_BACK_LOG = 128;
-const int BUFFER_SIZE = 1024;
-
-int initialize_udp_server(int port);
-
-void receive_initial_book_statuses(int sfd, unordered_map<string, int> &bookStatuses);
-
-void handle_commands(int sfd);
-
-void send_acknowledgment(int sfd, const sockaddr_in &addr, const string &message);
-
-unordered_map<string, int> deserialize_book_statuses(const string &data);
-
-int initialize_tcp_server(int port);
-
-int handle_new_connection(int sfd);
-
-void communicate_with_client(int cfd);
 
 int main() {
-    int udp_sfd = initialize_udp_server(SERVER_M_UDP_PORT);
-    if (udp_sfd < 0) {
-        return 1;
-    }
+
+    cout << "Main Server is up and running." << endl;
+
+    int udp_fd = initialize_socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP, SERVER_M_UDP_PORT, true);
+    if (udp_fd < 0) return 1;
 
     unordered_map<string, int> combinedBookStatuses;
-    receive_initial_book_statuses(udp_sfd, combinedBookStatuses);
-    handle_commands(udp_sfd);
-    close(udp_sfd); // Close the UDP socket
+    process_udp_server(udp_fd, combinedBookStatuses);
 
-    int tcp_sfd = initialize_tcp_server(SERVER_M_TCP_PORT);
-    if (tcp_sfd < 0) {
-        return 1;
+
+    auto memberInfo = read_member(FILE_PATH + "member.txt");
+
+    int tcp_fd = initialize_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP, SERVER_M_TCP_PORT, true);
+    if (tcp_fd < 0) return 1;
+    while (true) {
+        int client_fd = accept_connection(tcp_fd);
+        if (client_fd < 0) continue;
+
+        if (authenticate_client(client_fd, memberInfo)) {
+            handle_authenticated_tcp_requests(client_fd, combinedBookStatuses, udp_fd);
+        } else {
+            cout << "Authentication failed. Closing connection." << endl;
+            close(client_fd);
+        }
     }
 
-    int client_fd = handle_new_connection(tcp_sfd);
-    if (client_fd < 0) {
-        close(tcp_sfd);
-        return 1;
-    }
-
-    communicate_with_client(client_fd);
-
-    close(client_fd);
-    close(tcp_sfd); // Close the TCP socket
+    close(tcp_fd);
     return 0;
 }
 
-
-int initialize_udp_server(int port) {
-    int sfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (sfd == -1) {
-        cerr << "Initial UDP Socket failed: " << strerror(errno) << endl;
+int initialize_socket(int domain, int type, int protocol, int port, bool reuseaddr) {
+    int fd = socket(domain, type, protocol);
+    if (fd == -1) {
+        cerr << "Socket creation failed: " << strerror(errno) << endl;
         return -1;
     }
 
-    struct sockaddr_in sock_addr_in{};
-    sock_addr_in.sin_family = AF_INET;
-    sock_addr_in.sin_port = htons(port);
-    sock_addr_in.sin_addr.s_addr = INADDR_ANY;
+    if (reuseaddr) {
+        int opt_val = 1;
+        setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt_val, sizeof(opt_val));
+    }
 
-    if (bind(sfd, (struct sockaddr *) &sock_addr_in, sizeof(sock_addr_in)) == -1) {
-        cerr << "Bind UDP socket failed: " << strerror(errno) << endl;
-        close(sfd);
+    sockaddr_in addr{};
+    addr.sin_family = domain;
+    addr.sin_port = htons(port);
+    addr.sin_addr.s_addr = INADDR_ANY;
+
+    if (bind(fd, reinterpret_cast<struct sockaddr *>(&addr), sizeof(addr)) == -1) {
+        cerr << "Socket bind failed: " << strerror(errno) << endl;
+        close(fd);
         return -1;
     }
 
-    return sfd;
+    if (type == SOCK_STREAM) {
+        if (listen(fd, LISTEN_BACK_LOG) == -1) {
+            cerr << "Socket listen failed: " << strerror(errno) << endl;
+            close(fd);
+            return -1;
+        }
+    }
+
+    return fd;
 }
 
-void receive_initial_book_statuses(int sfd, unordered_map<string, int> &bookStatuses) {
+int accept_connection(int server_fd) {
+    sockaddr_in client_addr{};
+    socklen_t client_addr_len = sizeof(client_addr);
+    int client_fd = accept(server_fd, reinterpret_cast<struct sockaddr *>(&client_addr), &client_addr_len);
+    if (client_fd == -1) {
+        cerr << "Accept failed: " << strerror(errno) << endl;
+        return -1;
+    }
+
+    char client_ip[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, sizeof(client_ip));
+//    cout << "Connection accepted from " << client_ip << ":" << ntohs(client_addr.sin_port) << endl;
+
+    return client_fd;
+}
+
+bool authenticate_client(int client_fd, const unordered_map<string, string> &memberInfo) {
+    char buffer[BUFFER_SIZE];
+    ssize_t len = recv(client_fd, buffer, BUFFER_SIZE, 0);
+
+    if (len <= 0) {
+        if (len < 0) cerr << "Error receiving credentials: " << strerror(errno) << endl;
+        return false;
+    }
+
+    string credentials(buffer, len);
+    size_t separator = credentials.find('\n');
+    if (separator == string::npos) return false;
+
+    string encryptedUsername = credentials.substr(0, separator);
+    string encryptedPassword = credentials.substr(separator + 1, credentials.length() - separator - 1);
+
+    cout << "Main Server received the username and password from the client using TCP over port " << SERVER_M_TCP_PORT
+         << "." << endl;
+
+    auto it = memberInfo.find(encryptedUsername);
+    string response;
+
+    if (it == memberInfo.end()) {
+        response = "Failed login. Invalid username.";
+        cout << encryptedUsername << " is not registered. Send a reply to the client." << endl;
+    } else if (it->second != encryptedPassword) {
+        response = "Failed login. Invalid password.";
+        cout << "Password for " << encryptedUsername << " does not match the username. Send a reply to the client."
+             << endl;
+    } else {
+        response = "Login successful.";
+        cout << "Password for " << encryptedUsername << " matches the username. Send a reply to the client." << endl;
+    }
+
+    send(client_fd, response.c_str(), response.size(), 0);
+
+    return response == "Login successful.";
+}
+
+
+void handle_authenticated_tcp_requests(int client_fd, unordered_map<string, int> &bookStatuses, int udp_fd) {
+    char buffer[BUFFER_SIZE];
+    ssize_t len;
+
+    while ((len = recv(client_fd, buffer, BUFFER_SIZE, 0)) > 0) {
+        string bookCode(buffer, len);
+        sockaddr_in client_addr{};
+        socklen_t client_addr_len = sizeof(client_addr);
+        getpeername(client_fd, (struct sockaddr *) &client_addr, &client_addr_len); // To get dynamic client port
+
+        cout << "Main Server received the book request from client using TCP over port "
+             << ntohs(client_addr.sin_port) << "." << endl;
+
+        if (bookStatuses.find(bookCode) != bookStatuses.end()) {
+            string serverIdentifier = determineServerIdentifier(bookCode);
+            if (!serverIdentifier.empty()) {
+                cout << "Found " << bookCode << " located at Server " << serverIdentifier
+                     << ". Sending to Server " << serverIdentifier << "." << endl;
+                forwardRequestToUdpServer(serverIdentifier, bookCode, udp_fd);
+//                string udpResponse = receiveResponseFromUdpServer(udp_fd);
+//                send(client_fd, udpResponse.c_str(), udpResponse.size(), 0);
+                string udpResponse = receiveResponseFromUdpServer(udp_fd);
+                cout << udpResponse << endl;
+                send(client_fd, udpResponse.c_str(), udpResponse.size(), 0);
+            } else {
+                cerr << "Invalid book code prefix." << endl;
+            }
+        } else {
+            string notFoundResponse = "Did not find " + bookCode + " in the book code list.";
+            cout << notFoundResponse << endl;
+            send(client_fd, notFoundResponse.c_str(), notFoundResponse.size(), 0);
+        }
+    }
+
+    if (len == 0) {
+        cout << "Client has disconnected." << endl;
+    } else if (len < 0) {
+        cerr << "Error receiving TCP request: " << strerror(errno) << endl;
+    }
+}
+
+
+string determineServerIdentifier(const string &bookCode) {
+    switch (bookCode[0]) {
+        case 'S':
+            return "S";
+        case 'L':
+            return "L";
+        case 'H':
+            return "H";
+        default:
+            return "";
+    }
+}
+
+void forwardRequestToUdpServer(const string &serverIdentifier, const string &bookCode, int udpSocket) {
+    struct sockaddr_in backendServerAddr{};
+//    memset(&backendServerAddr, 0, sizeof(backendServerAddr));
+    backendServerAddr.sin_family = AF_INET;
+    backendServerAddr.sin_addr.s_addr = inet_addr(LOCALHOST_IP);
+
+    if (serverIdentifier == "S") {
+        backendServerAddr.sin_port = htons(SERVER_S_UDP_PORT);
+    } else if (serverIdentifier == "L") {
+        backendServerAddr.sin_port = htons(SERVER_L_UDP_PORT);
+    } else if (serverIdentifier == "H") {
+        backendServerAddr.sin_port = htons(SERVER_H_UDP_PORT);
+    } else {
+        cerr << "Invalid server identifier." << endl;
+        return;
+    }
+
+    ssize_t sentBytes = sendto(udpSocket, bookCode.c_str(), bookCode.size(), 0,
+                               (struct sockaddr *) &backendServerAddr, sizeof(backendServerAddr));
+    if (sentBytes < 0) {
+        cerr << "Error sending UDP request: " << strerror(errno) << endl;
+    }
+}
+
+string receiveResponseFromUdpServer(int udpSocket) {
+    char buffer[BUFFER_SIZE];
+    struct sockaddr_in fromAddr{};
+    socklen_t fromAddrLen = sizeof(fromAddr);
+
+    ssize_t recvLen = recvfrom(udpSocket, buffer, BUFFER_SIZE, 0, (struct sockaddr *) &fromAddr, &fromAddrLen);
+    if (recvLen > 0) {
+        return string(buffer, recvLen);
+    } else {
+        cerr << "Error receiving UDP response: " << strerror(errno) << endl;
+        return "";
+    }
+}
+
+
+int getClientPort(int client_fd) {
+    sockaddr_in client_addr{};
+    socklen_t addr_len = sizeof(client_addr);
+    if (getpeername(client_fd, (struct sockaddr *) &client_addr, &addr_len) == -1) {
+        cerr << "Error getting client port: " << strerror(errno) << endl;
+        return -1;
+    }
+    return ntohs(client_addr.sin_port);
+}
+
+
+void process_udp_server(int server_fd, unordered_map<string, int> &bookStatuses) {
     bool receivedS = false, receivedL = false, receivedH = false;
     char buffer[BUFFER_SIZE];
     struct sockaddr_in sender_addr{};
     socklen_t sender_addr_len = sizeof(sender_addr);
 
-    while (!(receivedS && receivedL && receivedH)) {
-        ssize_t len = recvfrom(sfd, buffer, BUFFER_SIZE, 0, (struct sockaddr *) &sender_addr, &sender_addr_len);
+//    cout << "Waiting for initial book statuses from servers S, L, and H..." << endl;
+
+    while (!receivedS || !receivedL || !receivedH) {
+        ssize_t len = recvfrom(server_fd, buffer, BUFFER_SIZE, 0, (struct sockaddr *) &sender_addr,
+                               &sender_addr_len);
         if (len > 0) {
             string receivedData(buffer, len);
             auto tempStatuses = deserialize_book_statuses(receivedData);
+            string serverIdentifier;
 
             for (const auto &entry: tempStatuses) {
-                bookStatuses[entry.first] = entry.second; // Insert into the main map
-                if (entry.first[0] == 'S') receivedS = true;
-                else if (entry.first[0] == 'L') receivedL = true;
-                else if (entry.first[0] == 'H') receivedH = true;
+                bookStatuses[entry.first] = entry.second;
+
+                if (!receivedS && entry.first[0] == 'S') {
+                    receivedS = true;
+                    serverIdentifier = "S";
+                } else if (!receivedL && entry.first[0] == 'L') {
+                    receivedL = true;
+                    serverIdentifier = "L";
+                } else if (!receivedH && entry.first[0] == 'H') {
+                    receivedH = true;
+                    serverIdentifier = "H";
+                }
             }
 
-            send_acknowledgment(sfd, sender_addr, "Acknowledged");
+            if (!serverIdentifier.empty()) {
+                cout << "Main Server received the book code list from server " << serverIdentifier
+                     << " using UDP over port " << ntohs(sender_addr.sin_port) << "." << endl;
+//                send_acknowledgment(server_fd, sender_addr, "Acknowledged");
+//                cout << "Sent acknowledgment to server " << serverIdentifier << "." << endl;
+            }
         } else if (len < 0) {
             cerr << "Error receiving data: " << strerror(errno) << endl;
-            break;
+            if (errno == EINTR) continue; // Handle interrupted system calls
+            else break;
         }
     }
-    cout << "Received all initial book statuses." << endl;
-}
-
-void handle_commands(int sfd) {
-    char buffer[BUFFER_SIZE];
-    struct sockaddr_in sender_addr{};
-    socklen_t sender_addr_len = sizeof(sender_addr);
-
-    while (true) {
-        ssize_t len = recvfrom(sfd, buffer, BUFFER_SIZE, 0, (struct sockaddr *) &sender_addr, &sender_addr_len);
-        if (len > 0) {
-            string command(buffer, len);
-            cout << "Received command: " << command << endl;
-            // TODO: Process the command
-            send_acknowledgment(sfd, sender_addr, "Command processed"); // Placeholder response
-        } else if (len < 0) {
-            cerr << "Error receiving command: " << strerror(errno) << endl;
-            break;
-        }
-    }
+//    if (receivedS && receivedL && receivedH) {
+//        cout << "All initial book statuses have been received successfully." << endl;
+//    }
 }
 
 void send_acknowledgment(int sfd, const sockaddr_in &addr, const string &message) {
-    ssize_t sent_bytes = sendto(sfd, message.c_str(), message.size(), 0, (const struct sockaddr *) &addr, sizeof(addr));
-    if (sent_bytes < 0) {
+    const char *msg = message.c_str();
+    size_t msg_length = message.size();
+
+    ssize_t bytes_sent = sendto(sfd, msg, msg_length, 0, (const struct sockaddr *) &addr, sizeof(addr));
+
+    if (bytes_sent < 0) {
         cerr << "Error sending acknowledgment: " << strerror(errno) << endl;
+    } else {
+        cout << "Acknowledgment sent." << endl;
     }
 }
+
 
 unordered_map<string, int> deserialize_book_statuses(const string &data) {
     unordered_map<string, int> bookStatuses;
-    std::stringstream ss(data);
+    istringstream ss(data);
     string line;
 
-    while (std::getline(ss, line)) {
-        std::stringstream lineStream(line);
+    while (getline(ss, line)) {
+        istringstream lineStream(line);
         string bookCode;
         int status;
-        if (std::getline(lineStream, bookCode, ',')) {
-            lineStream >> status;
+        if (getline(lineStream, bookCode, ',')) {
+            lineStream >> status;  // Extract the status
             bookStatuses[bookCode] = status;
         }
     }
-
     return bookStatuses;
 }
 
-int initialize_tcp_server(int port) {
-    int sfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (sfd == -1) {
-        cerr << "Initial TCP Socket failed: " << strerror(errno) << endl;
-        return -1;
-    }
+unordered_map<string, string> read_member(const string &filepath) {
+    ifstream file(filepath);
+    string line;
+    unordered_map<string, string> memberInfo;
 
-    struct sockaddr_in sock_addr_in{};
-    sock_addr_in.sin_family = AF_INET;
-    sock_addr_in.sin_port = htons(port);
-    sock_addr_in.sin_addr.s_addr = INADDR_ANY;
-
-    int bind_result = bind(sfd, (struct sockaddr *) &sock_addr_in, sizeof(sock_addr_in));
-    if (bind_result == -1) {
-        cerr << "Bind TCP socket failed: " << strerror(errno) << endl;
-        close(sfd);
-        return -1;
-    }
-
-    int listen_result = listen(sfd, LISTEN_BACK_LOG);
-    if (listen_result == -1) {
-        cerr << "Listen TCP failed: " << strerror(errno) << endl;
-        close(sfd);
-        return -1;
-    }
-
-    return sfd;
-}
-
-int handle_new_connection(int sfd) {
-    struct sockaddr_in caddr{};
-    socklen_t caddr_len = sizeof(caddr);
-    int cfd = accept(sfd, (struct sockaddr *) &caddr, &caddr_len);
-    if (cfd == -1) {
-        cerr << "Accept TCP failed: " << strerror(errno) << endl;
-        return -1;
-    }
-
-    char ip[INET_ADDRSTRLEN];
-    cout << "(TCP) IP Address of Client: " << inet_ntop(AF_INET, &caddr.sin_addr, ip, sizeof(ip))
-         << ", Port Number: " << ntohs(caddr.sin_port) << endl;
-
-    return cfd;
-}
-
-void communicate_with_client(int cfd) {
-    char buff[BUFFER_SIZE];
-    while (true) {
-        ssize_t len = recv(cfd, buff, BUFFER_SIZE, 0);
-        if (len > 0) {
-            cout << "(TCP) Data from Client: " << string(buff, len) << endl;
-            send(cfd, buff, len, 0); // Echo back the received data
-        } else if (len == 0) {
-            cout << "(TCP) Client has disconnected" << endl;
-            break;
-        } else {
-            cerr << "(TCP) Receiving failed: " << strerror(errno) << endl;
-            break;
+    if (file.is_open()) {
+        while (getline(file, line)) {
+            istringstream ss(line);
+            string encryptedMemberName;
+            string encryptedMemberPassword;
+            if (getline(ss, encryptedMemberName, ',')) {
+                ss.ignore();
+                ss >> encryptedMemberPassword;
+                memberInfo[encryptedMemberName] = encryptedMemberPassword;
+            }
         }
+        file.close();
+    } else {
+        cerr << "Unable to open file at path: " << filepath << endl;
     }
+
+    cout << "Main Server loaded the member list." << endl;
+    return memberInfo;
 }

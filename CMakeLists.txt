@@ -5,10 +5,14 @@ set(CMAKE_CXX_STANDARD 17)
 
 # If you have additional libraries you need to link against, do it here:
 # target_link_libraries(ServerM some_library)
-# target_link_libraries(Client some_library)
+# target_link_libraries(client some_library)
 
-add_executable(ServerM serverM.cpp)
-add_executable(Client client.cpp)
-add_executable(ServerS serverS.cpp)
-add_executable(ServerL serverL.cpp)
-add_executable(ServerH serverH.cpp)
+add_executable(serverM serverM.cpp
+        serverM.h)
+add_executable(client client.cpp client.h)
+add_executable(serverS serverS.cpp
+        serverS.h)
+add_executable(serverL serverL.cpp
+        serverL.h)
+add_executable(serverH serverH.cpp
+        serverH.h)

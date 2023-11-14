@@ -41,159 +41,159 @@ include CMakeFiles/rules.ninja
 
 cmake_ninja_workdir = /Users/william/Library/Mobile$ Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/cmake-build-debug/
 # =============================================================================
-# Object build statements for EXECUTABLE target ServerM
+# Object build statements for EXECUTABLE target serverM
 
 
 #############################################
-# Order-only phony target for ServerM
+# Order-only phony target for serverM
 
-build cmake_object_order_depends_target_ServerM: phony || CMakeFiles/ServerM.dir
+build cmake_object_order_depends_target_serverM: phony || CMakeFiles/serverM.dir
 
-build CMakeFiles/ServerM.dir/serverM.cpp.o: CXX_COMPILER__ServerM_unscanned_Debug /Users/william/Library/Mobile$ Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/serverM.cpp || cmake_object_order_depends_target_ServerM
-  DEP_FILE = CMakeFiles/ServerM.dir/serverM.cpp.o.d
+build CMakeFiles/serverM.dir/serverM.cpp.o: CXX_COMPILER__serverM_unscanned_Debug /Users/william/Library/Mobile$ Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/serverM.cpp || cmake_object_order_depends_target_serverM
+  DEP_FILE = CMakeFiles/serverM.dir/serverM.cpp.o.d
   FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk -fcolor-diagnostics
-  OBJECT_DIR = CMakeFiles/ServerM.dir
-  OBJECT_FILE_DIR = CMakeFiles/ServerM.dir
+  OBJECT_DIR = CMakeFiles/serverM.dir
+  OBJECT_FILE_DIR = CMakeFiles/serverM.dir
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target ServerM
+# Link build statements for EXECUTABLE target serverM
 
 
 #############################################
-# Link the executable ServerM
+# Link the executable serverM
 
-build ServerM: CXX_EXECUTABLE_LINKER__ServerM_Debug CMakeFiles/ServerM.dir/serverM.cpp.o
+build serverM: CXX_EXECUTABLE_LINKER__serverM_Debug CMakeFiles/serverM.dir/serverM.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk
-  OBJECT_DIR = CMakeFiles/ServerM.dir
+  OBJECT_DIR = CMakeFiles/serverM.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = ServerM
-  TARGET_PDB = ServerM.dbg
+  TARGET_FILE = serverM
+  TARGET_PDB = serverM.dbg
 
 # =============================================================================
-# Object build statements for EXECUTABLE target Client
+# Object build statements for EXECUTABLE target client
 
 
 #############################################
-# Order-only phony target for Client
+# Order-only phony target for client
 
-build cmake_object_order_depends_target_Client: phony || CMakeFiles/Client.dir
+build cmake_object_order_depends_target_client: phony || CMakeFiles/client.dir
 
-build CMakeFiles/Client.dir/client.cpp.o: CXX_COMPILER__Client_unscanned_Debug /Users/william/Library/Mobile$ Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/client.cpp || cmake_object_order_depends_target_Client
-  DEP_FILE = CMakeFiles/Client.dir/client.cpp.o.d
+build CMakeFiles/client.dir/client.cpp.o: CXX_COMPILER__client_unscanned_Debug /Users/william/Library/Mobile$ Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/client.cpp || cmake_object_order_depends_target_client
+  DEP_FILE = CMakeFiles/client.dir/client.cpp.o.d
   FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk -fcolor-diagnostics
-  OBJECT_DIR = CMakeFiles/Client.dir
-  OBJECT_FILE_DIR = CMakeFiles/Client.dir
+  OBJECT_DIR = CMakeFiles/client.dir
+  OBJECT_FILE_DIR = CMakeFiles/client.dir
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target Client
+# Link build statements for EXECUTABLE target client
 
 
 #############################################
-# Link the executable Client
+# Link the executable client
 
-build Client: CXX_EXECUTABLE_LINKER__Client_Debug CMakeFiles/Client.dir/client.cpp.o
+build client: CXX_EXECUTABLE_LINKER__client_Debug CMakeFiles/client.dir/client.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk
-  OBJECT_DIR = CMakeFiles/Client.dir
+  OBJECT_DIR = CMakeFiles/client.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = Client
-  TARGET_PDB = Client.dbg
+  TARGET_FILE = client
+  TARGET_PDB = client.dbg
 
 # =============================================================================
-# Object build statements for EXECUTABLE target ServerS
+# Object build statements for EXECUTABLE target serverS
 
 
 #############################################
-# Order-only phony target for ServerS
+# Order-only phony target for serverS
 
-build cmake_object_order_depends_target_ServerS: phony || CMakeFiles/ServerS.dir
+build cmake_object_order_depends_target_serverS: phony || CMakeFiles/serverS.dir
 
-build CMakeFiles/ServerS.dir/serverS.cpp.o: CXX_COMPILER__ServerS_unscanned_Debug /Users/william/Library/Mobile$ Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/serverS.cpp || cmake_object_order_depends_target_ServerS
-  DEP_FILE = CMakeFiles/ServerS.dir/serverS.cpp.o.d
+build CMakeFiles/serverS.dir/serverS.cpp.o: CXX_COMPILER__serverS_unscanned_Debug /Users/william/Library/Mobile$ Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/serverS.cpp || cmake_object_order_depends_target_serverS
+  DEP_FILE = CMakeFiles/serverS.dir/serverS.cpp.o.d
   FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk -fcolor-diagnostics
-  OBJECT_DIR = CMakeFiles/ServerS.dir
-  OBJECT_FILE_DIR = CMakeFiles/ServerS.dir
+  OBJECT_DIR = CMakeFiles/serverS.dir
+  OBJECT_FILE_DIR = CMakeFiles/serverS.dir
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target ServerS
+# Link build statements for EXECUTABLE target serverS
 
 
 #############################################
-# Link the executable ServerS
+# Link the executable serverS
 
-build ServerS: CXX_EXECUTABLE_LINKER__ServerS_Debug CMakeFiles/ServerS.dir/serverS.cpp.o
+build serverS: CXX_EXECUTABLE_LINKER__serverS_Debug CMakeFiles/serverS.dir/serverS.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk
-  OBJECT_DIR = CMakeFiles/ServerS.dir
+  OBJECT_DIR = CMakeFiles/serverS.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = ServerS
-  TARGET_PDB = ServerS.dbg
+  TARGET_FILE = serverS
+  TARGET_PDB = serverS.dbg
 
 # =============================================================================
-# Object build statements for EXECUTABLE target ServerL
+# Object build statements for EXECUTABLE target serverL
 
 
 #############################################
-# Order-only phony target for ServerL
+# Order-only phony target for serverL
 
-build cmake_object_order_depends_target_ServerL: phony || CMakeFiles/ServerL.dir
+build cmake_object_order_depends_target_serverL: phony || CMakeFiles/serverL.dir
 
-build CMakeFiles/ServerL.dir/serverL.cpp.o: CXX_COMPILER__ServerL_unscanned_Debug /Users/william/Library/Mobile$ Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/serverL.cpp || cmake_object_order_depends_target_ServerL
-  DEP_FILE = CMakeFiles/ServerL.dir/serverL.cpp.o.d
+build CMakeFiles/serverL.dir/serverL.cpp.o: CXX_COMPILER__serverL_unscanned_Debug /Users/william/Library/Mobile$ Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/serverL.cpp || cmake_object_order_depends_target_serverL
+  DEP_FILE = CMakeFiles/serverL.dir/serverL.cpp.o.d
   FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk -fcolor-diagnostics
-  OBJECT_DIR = CMakeFiles/ServerL.dir
-  OBJECT_FILE_DIR = CMakeFiles/ServerL.dir
+  OBJECT_DIR = CMakeFiles/serverL.dir
+  OBJECT_FILE_DIR = CMakeFiles/serverL.dir
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target ServerL
+# Link build statements for EXECUTABLE target serverL
 
 
 #############################################
-# Link the executable ServerL
+# Link the executable serverL
 
-build ServerL: CXX_EXECUTABLE_LINKER__ServerL_Debug CMakeFiles/ServerL.dir/serverL.cpp.o
+build serverL: CXX_EXECUTABLE_LINKER__serverL_Debug CMakeFiles/serverL.dir/serverL.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk
-  OBJECT_DIR = CMakeFiles/ServerL.dir
+  OBJECT_DIR = CMakeFiles/serverL.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = ServerL
-  TARGET_PDB = ServerL.dbg
+  TARGET_FILE = serverL
+  TARGET_PDB = serverL.dbg
 
 # =============================================================================
-# Object build statements for EXECUTABLE target ServerH
+# Object build statements for EXECUTABLE target serverH
 
 
 #############################################
-# Order-only phony target for ServerH
+# Order-only phony target for serverH
 
-build cmake_object_order_depends_target_ServerH: phony || CMakeFiles/ServerH.dir
+build cmake_object_order_depends_target_serverH: phony || CMakeFiles/serverH.dir
 
-build CMakeFiles/ServerH.dir/serverH.cpp.o: CXX_COMPILER__ServerH_unscanned_Debug /Users/william/Library/Mobile$ Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/serverH.cpp || cmake_object_order_depends_target_ServerH
-  DEP_FILE = CMakeFiles/ServerH.dir/serverH.cpp.o.d
+build CMakeFiles/serverH.dir/serverH.cpp.o: CXX_COMPILER__serverH_unscanned_Debug /Users/william/Library/Mobile$ Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/serverH.cpp || cmake_object_order_depends_target_serverH
+  DEP_FILE = CMakeFiles/serverH.dir/serverH.cpp.o.d
   FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk -fcolor-diagnostics
-  OBJECT_DIR = CMakeFiles/ServerH.dir
-  OBJECT_FILE_DIR = CMakeFiles/ServerH.dir
+  OBJECT_DIR = CMakeFiles/serverH.dir
+  OBJECT_FILE_DIR = CMakeFiles/serverH.dir
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target ServerH
+# Link build statements for EXECUTABLE target serverH
 
 
 #############################################
-# Link the executable ServerH
+# Link the executable serverH
 
-build ServerH: CXX_EXECUTABLE_LINKER__ServerH_Debug CMakeFiles/ServerH.dir/serverH.cpp.o
+build serverH: CXX_EXECUTABLE_LINKER__serverH_Debug CMakeFiles/serverH.dir/serverH.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.0.sdk
-  OBJECT_DIR = CMakeFiles/ServerH.dir
+  OBJECT_DIR = CMakeFiles/serverH.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = ServerH
-  TARGET_PDB = ServerH.dbg
+  TARGET_FILE = serverH
+  TARGET_PDB = serverH.dbg
 
 
 #############################################
@@ -229,7 +229,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /Users/william/Library/Mobile Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/cmake-build-debug
 
-build all: phony ServerM Client ServerS ServerL ServerH
+build all: phony serverM client serverS serverL serverH
 
 # =============================================================================
 # Built-in targets
