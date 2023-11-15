@@ -2,8 +2,8 @@
 // Created by Yaxing Li on 11/13/23.
 //
 
-#ifndef SERVERS_H
-#define SERVERS_H
+#ifndef SERVER_S_H
+#define SERVER_S_H
 
 #include <string>
 

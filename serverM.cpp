@@ -51,7 +51,7 @@ int main() {
         int client_fd = accept_connection(tcp_fd);
         if (client_fd < 0) continue;
 
-        if (authenticate_client(client_fd, memberInfo)) {
+        if (authenticate_client(client_fd, memberInfo, tcp_fd)) {
             handle_authenticated_tcp_requests(client_fd, combinedBookStatuses, udp_fd);
         } else {
             cout << "Authentication failed. Closing connection." << endl;
@@ -108,48 +108,66 @@ int accept_connection(int server_fd) {
 
     char client_ip[INET_ADDRSTRLEN];
     inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, sizeof(client_ip));
-//    cout << "Connection accepted from " << client_ip << ":" << ntohs(client_addr.sin_port) << endl;
+    cout << "Connection accepted from " << client_ip << ":" << ntohs(client_addr.sin_port) << endl;
 
     return client_fd;
 }
 
-bool authenticate_client(int client_fd, const unordered_map<string, string> &memberInfo) {
+
+bool authenticate_client(int client_fd, const unordered_map<string, string> &memberInfo, int tcp_fd) {
     char buffer[BUFFER_SIZE];
-    ssize_t len = recv(client_fd, buffer, BUFFER_SIZE, 0);
+    ssize_t len;
 
-    if (len <= 0) {
-        if (len < 0) cerr << "Error receiving credentials: " << strerror(errno) << endl;
-        return false;
+    // Stay in the loop until authentication is successful or a fatal error occurs.
+    while (true) {
+        len = recv(client_fd, buffer, BUFFER_SIZE, 0);
+
+        if (len <= 0) {
+            if (len < 0) cerr << "Error receiving credentials: " << strerror(errno) << endl;
+            return false;
+        }
+
+        string credentials(buffer, len);
+        size_t separator = credentials.find('\n');
+        if (separator == string::npos) return false;
+
+        string encryptedUsername = credentials.substr(0, separator);
+        string encryptedPassword = credentials.substr(separator + 1, credentials.length() - separator - 1);
+
+//        int client_fd = accept_connection(tcp_fd);
+//        if (client_fd < 0) continue;
+
+        sockaddr_in client_addr{};
+        socklen_t client_addr_len = sizeof(client_addr);
+        getpeername(client_fd, (struct sockaddr *)&client_addr, &client_addr_len);
+        cout << "Main Server received the username and password from the client using TCP over dynamic port "
+             << ntohs(client_addr.sin_port) << "." << endl;
+
+        auto it = memberInfo.find(encryptedUsername);
+        string response;
+
+        if (it == memberInfo.end()) {
+            response = "Failed login. Invalid username.";
+            cout << encryptedUsername << " is not registered. Send a reply to the client." << endl;
+        } else if (it->second != encryptedPassword) {
+            response = "Failed login. Invalid password.";
+            cout << "Password for " << encryptedUsername << " does not match the username. Send a reply to the client."
+                 << endl;
+        } else {
+            response = "Login successful.";
+            cout << "Password for " << encryptedUsername << " matches the username. Send a reply to the client."
+                 << endl;
+        }
+
+        send(client_fd, response.c_str(), response.size(), 0);
+
+        // Break the loop if the login was successful
+        if (response == "Login successful.") {
+            return true;
+        }
+
+        // Otherwise, the loop will continue, allowing the client to try again
     }
-
-    string credentials(buffer, len);
-    size_t separator = credentials.find('\n');
-    if (separator == string::npos) return false;
-
-    string encryptedUsername = credentials.substr(0, separator);
-    string encryptedPassword = credentials.substr(separator + 1, credentials.length() - separator - 1);
-
-    cout << "Main Server received the username and password from the client using TCP over port " << SERVER_M_TCP_PORT
-         << "." << endl;
-
-    auto it = memberInfo.find(encryptedUsername);
-    string response;
-
-    if (it == memberInfo.end()) {
-        response = "Failed login. Invalid username.";
-        cout << encryptedUsername << " is not registered. Send a reply to the client." << endl;
-    } else if (it->second != encryptedPassword) {
-        response = "Failed login. Invalid password.";
-        cout << "Password for " << encryptedUsername << " does not match the username. Send a reply to the client."
-             << endl;
-    } else {
-        response = "Login successful.";
-        cout << "Password for " << encryptedUsername << " matches the username. Send a reply to the client." << endl;
-    }
-
-    send(client_fd, response.c_str(), response.size(), 0);
-
-    return response == "Login successful.";
 }
 
 
@@ -161,7 +179,7 @@ void handle_authenticated_tcp_requests(int client_fd, unordered_map<string, int>
         string bookCode(buffer, len);
         sockaddr_in client_addr{};
         socklen_t client_addr_len = sizeof(client_addr);
-        getpeername(client_fd, (struct sockaddr *) &client_addr, &client_addr_len); // To get dynamic client port
+        getpeername(client_fd, (struct sockaddr *) &client_addr, &client_addr_len);
 
         cout << "Main Server received the book request from client using TCP over port "
              << ntohs(client_addr.sin_port) << "." << endl;
@@ -171,22 +189,29 @@ void handle_authenticated_tcp_requests(int client_fd, unordered_map<string, int>
             if (!serverIdentifier.empty()) {
                 cout << "Found " << bookCode << " located at Server " << serverIdentifier
                      << ". Sending to Server " << serverIdentifier << "." << endl;
+
                 forwardRequestToUdpServer(serverIdentifier, bookCode, udp_fd);
-//                string udpResponse = receiveResponseFromUdpServer(udp_fd);
-//                send(client_fd, udpResponse.c_str(), udpResponse.size(), 0);
                 string udpResponse = receiveResponseFromUdpServer(udp_fd);
-                cout << udpResponse << endl;
+
+                cout << "Main Server received from server " << serverIdentifier
+                     << " the book status result using UDP over port " << ntohs(client_addr.sin_port) << ": "
+                     << udpResponse << endl;
+
                 send(client_fd, udpResponse.c_str(), udpResponse.size(), 0);
+
+                cout << "Main Server sent the book status to the client." << endl;
             } else {
                 cerr << "Invalid book code prefix." << endl;
             }
         } else {
             string notFoundResponse = "Did not find " + bookCode + " in the book code list.";
             cout << notFoundResponse << endl;
+            notFoundResponse = "Not able to find";
             send(client_fd, notFoundResponse.c_str(), notFoundResponse.size(), 0);
         }
     }
 
+    // Handling client disconnection or errors.
     if (len == 0) {
         cout << "Client has disconnected." << endl;
     } else if (len < 0) {
@@ -246,7 +271,6 @@ string receiveResponseFromUdpServer(int udpSocket) {
     }
 }
 
-
 int getClientPort(int client_fd) {
     sockaddr_in client_addr{};
     socklen_t addr_len = sizeof(client_addr);
@@ -263,8 +287,6 @@ void process_udp_server(int server_fd, unordered_map<string, int> &bookStatuses)
     char buffer[BUFFER_SIZE];
     struct sockaddr_in sender_addr{};
     socklen_t sender_addr_len = sizeof(sender_addr);
-
-//    cout << "Waiting for initial book statuses from servers S, L, and H..." << endl;
 
     while (!receivedS || !receivedL || !receivedH) {
         ssize_t len = recvfrom(server_fd, buffer, BUFFER_SIZE, 0, (struct sockaddr *) &sender_addr,
@@ -292,8 +314,6 @@ void process_udp_server(int server_fd, unordered_map<string, int> &bookStatuses)
             if (!serverIdentifier.empty()) {
                 cout << "Main Server received the book code list from server " << serverIdentifier
                      << " using UDP over port " << ntohs(sender_addr.sin_port) << "." << endl;
-//                send_acknowledgment(server_fd, sender_addr, "Acknowledged");
-//                cout << "Sent acknowledgment to server " << serverIdentifier << "." << endl;
             }
         } else if (len < 0) {
             cerr << "Error receiving data: " << strerror(errno) << endl;
@@ -301,9 +321,6 @@ void process_udp_server(int server_fd, unordered_map<string, int> &bookStatuses)
             else break;
         }
     }
-//    if (receivedS && receivedL && receivedH) {
-//        cout << "All initial book statuses have been received successfully." << endl;
-//    }
 }
 
 void send_acknowledgment(int sfd, const sockaddr_in &addr, const string &message) {

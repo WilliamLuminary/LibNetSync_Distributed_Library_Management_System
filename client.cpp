@@ -107,18 +107,27 @@ void client::sendCredentials(const pair<string, string> &credentials) {
 
 bool client::authenticateAndHandleCommunication() {
     bool isAuthenticated = false;
+
     while (!isAuthenticated) {
         auto credentials = promptForCredentials();
         userName = credentials.first;
         sendCredentials(credentials);
-        isAuthenticated = receiveAuthenticationResult(credentials.first);
+        isAuthenticated = receiveAuthenticationResult(userName);
 
 //        if (!isAuthenticated) {
-//            cerr << "Authentication failed. Please try again." << endl;
+//            cout << "Authentication failed. Please try again or type 'exit' to quit." << endl;
+//            string choice;
+//            cin >> choice;
+//            if (choice == "exit") {
+//                closeSocket();
+//                return false;
+//            }
 //        }
     }
+
     return true;
 }
+
 
 bool client::receiveAuthenticationResult(const string &username) {
     char buffer[BUFFER_SIZE] = {0};
@@ -139,7 +148,7 @@ bool client::receiveAuthenticationResult(const string &username) {
             cout << username << " received an unrecognized response from the Main Server: " << response << endl;
         }
     } else if (len == 0) {
-        cerr << "Server has disconnected." << endl;
+        cerr << "Main server has disconnected." << endl;
     } else {
         cerr << "Receiving failed: " << strerror(errno) << endl;
     }
@@ -150,7 +159,7 @@ void client::handleAuthenticatedTcpCommunication() {
     string bookCode;
 
     while (true) {
-        cout << "Please enter book code to query (or type 'exit' to quit): ";
+        cout << "Please enter book code to query: ";
         cin >> bookCode;
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
@@ -165,7 +174,18 @@ void client::handleAuthenticatedTcpCommunication() {
 
         string serverResponse = receiveServerResponse();
         if (!serverResponse.empty()) {
-            cout << "Response from Main Server: " << serverResponse << endl;
+            // Parse the server response here to determine the message to print.
+            // Assuming serverResponse is structured in a way that you can parse to find out the book count or a not found message.
+            if (serverResponse.find("not available") != string::npos) {
+                cout << "The requested book " << bookCode << " is NOT available in the library." << endl;
+            } else if (serverResponse.find("available") != string::npos) {
+                cout << "The requested book " << bookCode << " is available in the library." << endl;
+            } else if (serverResponse.find("Not able to find") != string::npos) {
+                cout << "Not able to find the book-code " << bookCode << " in the system." << endl;
+            } else {
+                cout << "Response from Main Server: " << serverResponse << endl;
+            }
+            cout << "\n—- Start a new query —-" << endl;
         } else {
             cerr << "No response received from Main Server." << endl;
         }
@@ -188,15 +208,16 @@ bool client::sendBookCodeRequest(const string &bookCode) {
 string client::receiveServerResponse() {
     char buffer[BUFFER_SIZE] = {0};
     ssize_t len = recv(socket_fd, buffer, sizeof(buffer), 0);
+    string response;
     if (len > 0) {
-        cout << "Response received from the Main Server." << endl;
-        return string(buffer, len);
+        response = string(buffer, len);
+        cout << "Response received from the Main Server on TCP port: " << SERVER_M_TCP_PORT << "." << endl;
     } else if (len == 0) {
         cerr << "Main Server has disconnected." << endl;
     } else {
         cerr << "Receiving response failed: " << strerror(errno) << endl;
     }
-    return "";
+    return response;
 }
 
 

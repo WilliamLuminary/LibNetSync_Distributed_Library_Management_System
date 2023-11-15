@@ -43,7 +43,7 @@ int main() {
         return 1;
     }
 
-    if (receive_udp_commands(sockfd) < 0) {
+    if (receive_udp_commands(sockfd, bookStatuses) < 0) {
         close(sockfd);
         return 1;
     }
@@ -78,8 +78,8 @@ int send_udp_data(int sockfd, const sockaddr_in &address, const string &data) {
         cerr << "Sending UDP data failed: " << strerror(errno) << endl;
         return -1;
     }
-    cout << "Server S finished sending the availability status of code " << extract_book_code(data)
-         << " to the Main Server using UDP on port " << ntohs(address.sin_port) << "." << endl;
+//    cout << "Server S finished sending the availability status of code " << extract_book_code(data)
+//         << " to the Main Server using UDP on port " << ntohs(address.sin_port) << "." << endl;
     return 0;
 }
 
@@ -105,12 +105,17 @@ int receive_udp_commands(int sockfd, unordered_map<string, int> &bookStatuses) {
         ssize_t len = recvfrom(sockfd, buffer, BUFFER_SIZE, 0,
                                reinterpret_cast<struct sockaddr *>(&caddr), &caddr_len);
         if (len > 0) {
+            buffer[len] = '\0';
             string receivedData(buffer, len);
             string bookCode = extract_book_code(receivedData);
-            cout << "Server S received request for book code " << bookCode << " from the Main Server." << endl;
+            cout << "Server S received " << bookCode << " code from the Main Server." << endl;
 
             // Process the book request and prepare a response
             string response = process_book_request(bookCode, bookStatuses);
+
+            // Before sending the response, print the desired message
+            cout << "Server S finished sending the availability status of code " << bookCode
+                 << " to the Main Server using UDP on port " << SERVER_M_UDP_PORT << "." << endl;
 
             // Send the response back to the Main Server
             if (!response.empty()) {
@@ -132,8 +137,6 @@ int receive_udp_commands(int sockfd, unordered_map<string, int> &bookStatuses) {
     return 0;
 }
 
-// Inside the serverS.cpp
-
 string process_book_request(const string &bookCode, unordered_map<string, int> &bookStatuses) {
     auto it = bookStatuses.find(bookCode);
     if (it != bookStatuses.end()) {
@@ -154,19 +157,27 @@ string process_book_request(const string &bookCode, unordered_map<string, int> &
     }
 }
 
-// Call this function after processing each book request to update the book list file.
 void update_book_list_file(const unordered_map<string, int> &bookStatuses) {
-    std::ofstream file(FILE_PATH);
-    if (file.is_open()) {
-        for (const auto &pair : bookStatuses) {
-            file << pair.first << "," << pair.second << std::endl;
-        }
-        file.close();
-    } else {
+    std::ofstream file(FILE_PATH, std::ios::trunc);
+    if (!file.is_open() || file.fail()) {
         cerr << "Unable to open file at path: " << FILE_PATH << " to update book list." << endl;
+        return;
+    }
+
+    for (const auto &pair: bookStatuses) {
+        file << pair.first << "," << pair.second << std::endl;
+
+        if (file.fail()) {
+            cerr << "Failed to write to file at path: " << FILE_PATH << endl;
+            break;
+        }
+    }
+
+    file.close();
+    if (file.fail()) {
+        cerr << "Failed to properly close file at path: " << FILE_PATH << endl;
     }
 }
-
 
 
 unordered_map<string, int> read_book_list(const string &filepath) {
@@ -180,8 +191,7 @@ unordered_map<string, int> read_book_list(const string &filepath) {
             string bookCode;
             int status;
             if (std::getline(ss, bookCode, ',')) {
-                ss.ignore();
-                ss >> status;
+                ss >> status; // Directly read the integer status without ignoring any characters.
                 bookStatuses[bookCode] = status;
             }
         }

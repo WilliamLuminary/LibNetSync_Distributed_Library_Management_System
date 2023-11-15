@@ -2,8 +2,8 @@
 // Created by Yaxing Li on 11/13/23.
 //
 
-#ifndef SERVERM_H
-#define SERVERM_H
+#ifndef SERVER_M_H
+#define SERVER_M_H
 
 #include <string>
 
@@ -29,7 +29,7 @@ int initialize_socket(int domain, int type, int protocol, int port, bool reusead
 
 int accept_connection(int server_fd);
 
-bool authenticate_client(int client_fd, const std::unordered_map<std::string, std::string> &memberInfo);
+bool authenticate_client(int client_fd, const std::unordered_map<std::string, std::string> &memberInfo, int tcp_fd);
 
 void handle_authenticated_tcp_requests(int client_fd, std::unordered_map<std::string, int> &bookStatuses, int udp_fd);
 
