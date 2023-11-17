@@ -11,7 +11,7 @@
 #include <unordered_map>
 
 
-const std::string FILE_PATH = "../history.txt";
+const std::string FILE_PATH = "./history.txt";
 const char *LOCALHOST_IP = "127.0.0.1";
 const int LAST_3_DIGITS_YAXING_LI_USC_ID = 475;
 const int SERVER_H_UDP_BASE_PORT = 43000;
