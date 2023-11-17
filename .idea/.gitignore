@@ -7,6 +7,6 @@
 /dataSources/
 /dataSources.local.xml
 # IDE local configuration files
-#/.idea/
+.idea/
 # cmake local configuration files
-#/cmake-build-debug/
+cmake-build-debug/
