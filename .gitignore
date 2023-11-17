@@ -4,4 +4,6 @@
 
 cmake-build-debug
 
+CMakeLists.txt
+
 *.o
