@@ -6,3 +6,7 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+# IDE local configuration files
+../.idea/
+# cmake local configuration files
+../cmake-build-debug/
