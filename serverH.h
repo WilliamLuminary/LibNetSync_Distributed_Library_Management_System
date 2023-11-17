@@ -25,7 +25,7 @@ const std::string INVENTORY_QUERY_PREFIX = "INVENTORY:";
 
 int initialize_udp_socket(int port);
 
-int send_udp_data(int sockfd, const sockaddr_in &address, const std::string &data, bool isError = false);
+int send_udp_data(int sock_fd, const sockaddr_in &address, const std::string &data);
 
 int receive_udp_commands(int sockfd, std::unordered_map<std::string, int> &bookStatuses);
 
@@ -34,10 +34,6 @@ std::string process_inventory_request(const std::string &data, std::unordered_ma
 std::string process_book_request(const std::string &data, std::unordered_map<std::string, int> &bookStatuses, std::string &bookCode);
 
 std::unordered_map<std::string, int> read_book_list(const std::string &filepath);
-
-//void update_book_list_file(const std::unordered_map<std::string, int> &bookStatuses);
-
-//void print_map(const std::unordered_map<std::string, int> &bookStatuses);
 
 std::string serialize_book_statuses(const std::unordered_map<std::string, int> &bookStatuses);
 

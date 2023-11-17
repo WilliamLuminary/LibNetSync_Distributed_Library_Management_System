@@ -6,6 +6,8 @@
 #define SERVER_M_H
 
 #include <string>
+#include <netinet/in.h>
+#include <unordered_map>
 
 const std::string FILE_PATH = "../";
 const char *LOCALHOST_IP = "127.0.0.1";
