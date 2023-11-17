@@ -9,7 +9,7 @@
 #include <netinet/in.h>
 #include <unordered_map>
 
-const std::string FILE_PATH = "../";
+const std::string FILE_PATH = "./";
 const char *LOCALHOST_IP = "127.0.0.1";
 const int LAST_3_DIGITS_YAXING_LI_USC_ID = 475;
 const int SERVER_S_UDP_BASE_PORT = 41000;
