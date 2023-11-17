@@ -210,6 +210,8 @@ bool handle_authenticated_tcp_requests(int client_fd, unordered_map<string, int>
             cout << "Found " << bookCode << " located at Server " << identifier << ". Send to Server " << identifier
                  << "." << endl;
         } else {
+            string inv = "INVENTORY:";
+            if (adminFlag) bookCode = bookCode.substr(inv.length(), bookCode.length());
             cout << "Did not find " << bookCode << " in the book code list." << endl;
             skip = true;
         }
@@ -220,7 +222,6 @@ bool handle_authenticated_tcp_requests(int client_fd, unordered_map<string, int>
             cerr << "Error getting client port: " << strerror(errno) << endl;
             return false;
         }
-//        return ntohs(client_addr.sin_port);
         if (!skip) {
             cout << "Main Server received from server " << identifier
                  << " the book status result using UDP over port " << udp_addr.sin_port << ":\n"
@@ -228,13 +229,7 @@ bool handle_authenticated_tcp_requests(int client_fd, unordered_map<string, int>
                  << bookCode << " available is: " << availableCount << endl;
         }
         send(client_fd, udpResponse.c_str(), udpResponse.size(), 0);
-        if (!skip)cout << "Main Server sent the book status to the client." << endl;
-//        const string prefix = "INVENTORY:";
-//        if (adminFlag)
-//            cout << "Response for book code " << bookCode.substr(prefix.length(), bookCode.length())
-//                 << " sent to the client." << endl;
-//        else
-//            cout << "Response for book code " << bookCode << " sent to the client." << endl;
+        if (!skip) cout << "Main Server sent the book status to the client." << endl;
     }
 
     if (len == 0) {
@@ -272,8 +267,7 @@ bool forwardRequestToUdpServer(const string &serverIdentifier, const string &boo
     } else if (serverIdentifier == "H") {
         backendServerAddr.sin_port = htons(SERVER_H_UDP_PORT);
     } else {
-        cout << "Did not find " << bookCode << " in the book code list." << endl;
-//        cerr << "Invalid server identifier." << endl;
+//        cout << "Did not find " << bookCode << " in the book code list." << endl;
         return false;
     }
 
@@ -294,59 +288,26 @@ string receiveResponseFromUdpServer(int udpSocket) {
     ssize_t recvLen = recvfrom(udpSocket, buffer, BUFFER_SIZE, 0, (struct sockaddr *) &fromAddr, &fromAddrLen);
 
     if (recvLen > 0) {
-        buffer[recvLen] = '\0'; // Null-terminate the buffer to create a valid C-string
+        buffer[recvLen] = '\0';
         string response(buffer);
 
-        // Look for the "available" keyword in the response
-        size_t availablePos = response.find(":");
-        size_t commaPos = response.find(",", availablePos);
+        string inventoryDelim = ":";
+        string dataDelim = ",";
+        size_t availablePos = response.find(inventoryDelim);
+        size_t commaPos = response.find(dataDelim, availablePos);
 
-        // If it's an admin request and the response contains "available:" and a comma, parse the count
         if (adminFlag && availablePos != string::npos && commaPos != string::npos) {
-            string bookCode = response.substr(availablePos + strlen("available:"),
-                                              commaPos - (availablePos + strlen("available:")));
+            string bookCode = response.substr(availablePos + strlen(inventoryDelim.c_str()),
+                                              commaPos - (availablePos + strlen(inventoryDelim.c_str())));
             int count = std::stoi(response.substr(commaPos + 1));
             return "Total number of book " + bookCode + " available = " + std::to_string(count);
         }
-        // For regular users or if "available:" or comma is not found, return the raw response
         return response;
     } else {
         cerr << "Error receiving UDP response: " << strerror(errno) << endl;
         return "";
     }
-
-
-    if (recvLen > 0) {
-        if (adminFlag) {
-            string response(buffer, recvLen);
-            size_t delimiterPos = response.find(",");
-            if (delimiterPos != string::npos) {
-                string bookCode = response.substr(0, delimiterPos);
-                int count = std::stoi(response.substr(delimiterPos + 1));
-                return "Total number of book " + bookCode + " available = " + std::to_string(count);
-            } else {
-                return string(buffer, recvLen);
-            }
-        } else {
-            return string(buffer, recvLen);
-        }
-    } else {
-        cerr << "Error receiving UDP response: " << strerror(errno) << endl;
-        return "";
-    }
 }
-
-
-
-//int getClientPort(int client_fd) {
-//    sockaddr_in client_addr{};
-//    socklen_t addr_len = sizeof(client_addr);
-//    if (getpeername(client_fd, (struct sockaddr *) &client_addr, &addr_len) == -1) {
-//        cerr << "Error getting client port: " << strerror(errno) << endl;
-//        return -1;
-//    }
-//    return ntohs(client_addr.sin_port);
-//}
 
 void process_udp_server(int server_fd, unordered_map<string, int> &bookStatuses) {
     bool receivedS = false, receivedL = false, receivedH = false;
@@ -378,20 +339,13 @@ void process_udp_server(int server_fd, unordered_map<string, int> &bookStatuses)
                 }
             }
 
-            sockaddr_in recv_addr{};
-            socklen_t addr_len = sizeof(recv_addr);
-            if (getsockname(server_fd, (struct sockaddr *) &recv_addr, &addr_len) == -1) {
-                cerr << "Error getting server port: " << strerror(errno) << endl;
-
-            }
-
             if (!serverIdentifier.empty()) {
                 cout << "Main Server received the book code list from server " << serverIdentifier
-                     << " using UDP over port " << ntohs(recv_addr.sin_port) << "." << endl;
+                     << " using UDP over port " << getHostPort(server_fd) << "." << endl;
             }
         } else if (len < 0) {
             cerr << "Error receiving data: " << strerror(errno) << endl;
-            if (errno == EINTR) continue; // Handle interrupted system calls
+            if (errno == EINTR) continue;
             else break;
         }
     }
@@ -437,4 +391,14 @@ unordered_map<string, string> read_member(const string &filepath) {
 
     cout << "Main Server loaded the member list." << endl;
     return memberInfo;
+}
+
+int getHostPort(int socket_fd) {
+    sockaddr_in sAddr{};
+    socklen_t addrLen = sizeof(sAddr);
+    if (getsockname(socket_fd, (struct sockaddr *) &sAddr, &addrLen) == -1) {
+        cerr << "Error getting client port: " << strerror(errno) << endl;
+        return -1;
+    }
+    return ntohs(sAddr.sin_port);
 }

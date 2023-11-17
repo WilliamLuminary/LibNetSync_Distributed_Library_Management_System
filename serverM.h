@@ -37,7 +37,6 @@ bool authenticate_client(int client_fd, const std::unordered_map<std::string, st
 
 bool handle_authenticated_tcp_requests(int client_fd, std::unordered_map<std::string, int> &bookStatuses, int udp_fd);
 
-void handle_inventory_request(int client_fd, std::unordered_map<std::string, int> &bookStatuses, int udp_fd);
 
 std::string determineServerIdentifier(const std::string &bookCode);
 
@@ -47,21 +46,10 @@ std::string get_inventory_status_from_backend(const std::string &bookCode, int u
 
 std::string receiveResponseFromUdpServer(int udpSocket);
 
-int getClientPort(int client_fd);
-
-void send_acknowledgment(int sfd, const struct sockaddr_in &addr, const std::string &message);
-
 void process_udp_server(int server_fd, std::unordered_map<std::string, int> &bookStatuses);
 
 std::unordered_map<std::string, int> deserialize_book_statuses(const std::string &data);
 
-void handle_inventory_requests(int client_fd, std::unordered_map<std::string, int> &bookStatuses);
-
-void handle_admin_requests(int client_fd, std::unordered_map<std::string, int> &bookStatuses, int udp_fd);
-
-//void handle_authenticated_tcp_requests(int client_fd, std::unordered_map<std::string, int> &bookStatuses, int udp_fd);
-
-void handle_regular_requests(int client_fd, std::unordered_map<std::string, int> &bookStatuses, int udp_fd);
-
+int getHostPort(int socket_fd);
 
 #endif

@@ -5,7 +5,10 @@
 #ifndef SERVER_S_H
 #define SERVER_S_H
 
+
 #include <string>
+#include <netinet/in.h>
+#include <unordered_map>
 
 
 const std::string FILE_PATH = "../science.txt";
@@ -19,26 +22,25 @@ const int BUFFER_SIZE = 1024;
 const std::string SERVER_IDENTIFIER = "S";
 const std::string INVENTORY_QUERY_PREFIX = "INVENTORY:";
 
+
 int initialize_udp_socket(int port);
 
-int send_udp_data(int sockfd, const struct sockaddr_in &address, const std::string &data, bool isError = false);
+int send_udp_data(int sock_fd, const sockaddr_in &address, const std::string &data);
 
 int receive_udp_commands(int sockfd, std::unordered_map<std::string, int> &bookStatuses);
 
-std::string process_book_request(const std::string &bookCode, std::unordered_map<std::string, int> &bookStatuses);
+std::string process_inventory_request(const std::string &data, std::unordered_map<std::string, int> &bookStatuses, std::string &bookCode);
+
+std::string process_book_request(const std::string &data, std::unordered_map<std::string, int> &bookStatuses, std::string &bookCode);
 
 std::unordered_map<std::string, int> read_book_list(const std::string &filepath);
 
-void update_book_list_file(const std::unordered_map<std::string, int> &bookStatuses);
-
-void print_map(const std::unordered_map<std::string, int> &bookStatuses);
-
 std::string serialize_book_statuses(const std::unordered_map<std::string, int> &bookStatuses);
 
-sockaddr_in create_address(int port, const std::string &ip_address);
+sockaddr_in create_address(int port, const std::string &ip_address = "");
 
-std::string extract_book_code(const std::string &data);
+std::string extract_book_code(std::string_view data);
 
-std::string process_inventory_request(const std::string &bookCode, std::unordered_map<std::string, int> &bookStatuses);
+int getHostPort(int socket_fd);
 
 #endif

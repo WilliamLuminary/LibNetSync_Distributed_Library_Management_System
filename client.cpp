@@ -172,11 +172,14 @@ void client::handleAuthenticatedTcpCommunication() {
             continue;
         }
 
-        cout << userName << " sent the request to the Main Server." << endl;
+        if (userName == "Admin")
+            cout << "Request sent to the Main Server with Admin rights." << endl;
+        else cout << userName << " sent the request to the Main Server." << endl;
 
         string serverResponse = receiveServerResponse();
         if (!serverResponse.empty()) {
-            cout << "Response received from the Main Server on TCP port: " << SERVER_M_TCP_PORT << "." << endl;
+            int portNum = getHostPort(socket_fd);
+            cout << "Response received from the Main Server on TCP port: " << portNum << "." << endl;
 
             if (isAdmin) {
                 parseAdminResponse(serverResponse, bookCode);
@@ -200,7 +203,8 @@ void client::handleServerErrorResponse(const string &serverResponse, const strin
 void client::parseAdminResponse(const string &serverResponse, const string &bookCode) {
     const string prefix = "INVENTORY:";
     size_t prefixPos = serverResponse.find(prefix);
-    string trimmedResponse = (prefixPos != string::npos) ? serverResponse.substr(prefixPos + prefix.length()) : serverResponse;
+    string trimmedResponse = (prefixPos != string::npos) ? serverResponse.substr(prefixPos + prefix.length())
+                                                         : serverResponse;
 
     auto delimiterPos = trimmedResponse.find(',');
     if (delimiterPos != string::npos) {
@@ -271,3 +275,13 @@ string client::encrypt(const string &input) {
     return encrypted;
 }
 
+int client::getHostPort(int socket_fd) {
+    sockaddr_in sAddr{};
+    socklen_t addrLen = sizeof(sAddr);
+    if (getsockname(socket_fd, (struct sockaddr *) &sAddr, &addrLen) == -1) {
+        cerr << "Error getting client port: " << strerror(errno) << endl;
+        return -1;
+    }
+    return ntohs(sAddr.sin_port);
+    return 0;
+}

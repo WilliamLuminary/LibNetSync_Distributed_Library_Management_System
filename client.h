@@ -46,7 +46,7 @@ private:
 
     std::string encrypt(const std::string &input);
 
-    int getLocalPort();
+    int getHostPort(int socket_fd);
 
     void parseAdminResponse(const std::string &serverResponse, const std::string &bookCode);
 
