@@ -189,7 +189,8 @@ bool handle_authenticated_tcp_requests(int client_fd, unordered_map<string, int>
         string bookCode(buffer);
 
         string identifier = determineServerIdentifier(bookCode);
-        cout << "Main Server received the book request from client using TCP over port " << port_number << "." << endl;
+        cout << "Main Server received the book request from client using TCP over port " << getHostPort(udp_fd) << "."
+             << endl;
 
         if (adminFlag) bookCode = "INVENTORY:" + bookCode;
 
@@ -197,6 +198,8 @@ bool handle_authenticated_tcp_requests(int client_fd, unordered_map<string, int>
         if (forwardRequestToUdpServer(identifier, bookCode, udp_fd))
             udpResponse = receiveResponseFromUdpServer(udp_fd);
         else udpResponse = "Not able to find";
+        string inv = "INVENTORY:";
+        if (adminFlag) bookCode = bookCode.substr(inv.length(), bookCode.length());
 
 
         int availableCount = 0;
@@ -210,22 +213,14 @@ bool handle_authenticated_tcp_requests(int client_fd, unordered_map<string, int>
             cout << "Found " << bookCode << " located at Server " << identifier << ". Send to Server " << identifier
                  << "." << endl;
         } else {
-            string inv = "INVENTORY:";
-            if (adminFlag) bookCode = bookCode.substr(inv.length(), bookCode.length());
             cout << "Did not find " << bookCode << " in the book code list." << endl;
             skip = true;
         }
 
-        sockaddr_in udp_addr{};
-        socklen_t udp_len = sizeof(udp_addr);
-        if (getsockname(udp_fd, (struct sockaddr *) &udp_addr, &addr_len) == -1) {
-            cerr << "Error getting client port: " << strerror(errno) << endl;
-            return false;
-        }
         if (!skip) {
             cout << "Main Server received from server " << identifier
-                 << " the book status result using UDP over port " << udp_addr.sin_port << ":\n"
-                                                                                           "Number of books "
+                 << " the book status result using UDP over port " << getHostPort(udp_fd) << ":\n"
+                                                                                             "Number of books "
                  << bookCode << " available is: " << availableCount << endl;
         }
         send(client_fd, udpResponse.c_str(), udpResponse.size(), 0);
