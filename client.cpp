@@ -100,9 +100,12 @@ void client::sendCredentials(const pair<string, string> &credentials) {
     ssize_t sent = send(socket_fd, combinedCredentials.c_str(), combinedCredentials.length(), 0);
     if (sent == -1) {
         cerr << "Failed to send credentials: " << strerror(errno) << endl;
+        return;
     } else if (sent < static_cast<ssize_t>(combinedCredentials.length())) {
         cerr << "Not all credentials were sent." << endl;
+        return;
     }
+    cout << credentials.first << " sent an authentication request to the Main Server." << endl;
 }
 
 bool client::authenticateAndHandleCommunication() {
@@ -113,37 +116,35 @@ bool client::authenticateAndHandleCommunication() {
         userName = credentials.first;
         sendCredentials(credentials);
         isAuthenticated = receiveAuthenticationResult(userName);
-
-//        if (!isAuthenticated) {
-//            cout << "Authentication failed. Please try again or type 'exit' to quit." << endl;
-//            string choice;
-//            cin >> choice;
-//            if (choice == "exit") {
-//                closeSocket();
-//                return false;
-//            }
-//        }
     }
 
     return true;
 }
 
-
 bool client::receiveAuthenticationResult(const string &username) {
     char buffer[BUFFER_SIZE] = {0};
+    sockaddr_in addr{};
+    socklen_t addr_len = sizeof(addr);
+    if (getsockname(socket_fd, (struct sockaddr *) &addr, &addr_len) == -1) {
+        cerr << "Error getting peer name: " << strerror(errno) << endl;
+        return false;
+    }
+    int serverPort = ntohs(addr.sin_port);
+
     ssize_t len = recv(socket_fd, buffer, sizeof(buffer), 0);
     if (len > 0) {
         string response(buffer, len);
-        if (response.find("Login successful") != string::npos) {
+
+        if (response == "Login successful.") {
             cout << username << " received the result of authentication from Main Server using TCP over port "
-                 << SERVER_M_TCP_PORT << ". Authentication is successful." << endl;
+                 << serverPort << ". Authentication is successful." << endl;
             return true;
-        } else if (response.find("Invalid username") != string::npos) {
+        } else if (response.find("is not registered") != string::npos) {
             cout << username << " received the result of authentication from Main Server using TCP over port "
-                 << SERVER_M_TCP_PORT << ". Authentication failed: Username not found." << endl;
-        } else if (response.find("Invalid password") != string::npos) {
+                 << serverPort << ". Authentication failed: Username not found." << endl;
+        } else if (response.find("does not match the username") != string::npos) {
             cout << username << " received the result of authentication from Main Server using TCP over port "
-                 << SERVER_M_TCP_PORT << ". Authentication failed: Password does not match." << endl;
+                 << serverPort << ". Authentication failed: Password does not match." << endl;
         } else {
             cout << username << " received an unrecognized response from the Main Server: " << response << endl;
         }
@@ -155,40 +156,69 @@ bool client::receiveAuthenticationResult(const string &username) {
     return false;
 }
 
+
 void client::handleAuthenticatedTcpCommunication() {
     string bookCode;
+    bool isAdmin = (userName == "Admin"); // You can use a better check here
 
     while (true) {
+        cout << "\n—- Start a new query —-" << endl;
         cout << "Please enter book code to query: ";
         cin >> bookCode;
         cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-        if (bookCode == "exit") {
-            break;
-        }
 
         if (!sendBookCodeRequest(bookCode)) {
             cerr << "Failed to send book code to the Main Server." << endl;
             continue;
         }
 
+        cout << userName << " sent the request to the Main Server." << endl;
+
         string serverResponse = receiveServerResponse();
         if (!serverResponse.empty()) {
-            // Parse the server response here to determine the message to print.
-            // Assuming serverResponse is structured in a way that you can parse to find out the book count or a not found message.
-            if (serverResponse.find("not available") != string::npos) {
-                cout << "The requested book " << bookCode << " is NOT available in the library." << endl;
-            } else if (serverResponse.find("available") != string::npos) {
-                cout << "The requested book " << bookCode << " is available in the library." << endl;
-            } else if (serverResponse.find("Not able to find") != string::npos) {
-                cout << "Not able to find the book-code " << bookCode << " in the system." << endl;
+            cout << "Response received from the Main Server on TCP port: " << SERVER_M_TCP_PORT << "." << endl;
+
+            if (isAdmin) {
+                parseAdminResponse(serverResponse, bookCode);
             } else {
-                cout << "Response from Main Server: " << serverResponse << endl;
+                parseNonAdminResponse(serverResponse, bookCode);
             }
-            cout << "\n—- Start a new query —-" << endl;
         } else {
             cerr << "No response received from Main Server." << endl;
         }
+    }
+}
+
+void client::handleServerErrorResponse(const string &serverResponse, const string &bookCode) {
+    if (serverResponse.find("Not able to find") != string::npos) {
+        cout << "Not able to find the book-code " << bookCode << " in the system." << endl;
+    } else {
+        cout << "Response from Main Server: " << serverResponse << endl;
+    }
+}
+
+void client::parseAdminResponse(const string &serverResponse, const string &bookCode) {
+    const string prefix = "INVENTORY:";
+    size_t prefixPos = serverResponse.find(prefix);
+    string trimmedResponse = (prefixPos != string::npos) ? serverResponse.substr(prefixPos + prefix.length()) : serverResponse;
+
+    auto delimiterPos = trimmedResponse.find(',');
+    if (delimiterPos != string::npos) {
+        string code = trimmedResponse.substr(0, delimiterPos);
+        int count = std::stoi(trimmedResponse.substr(delimiterPos + 1));
+        cout << "Total number of book " << code << " available = " << count << endl;
+    } else {
+        handleServerErrorResponse(trimmedResponse, bookCode);
+    }
+}
+
+void client::parseNonAdminResponse(const string &serverResponse, const string &bookCode) {
+    if (serverResponse.find("not available") != string::npos) {
+        cout << "The requested book " << bookCode << " is NOT available in the library." << endl;
+    } else if (serverResponse.find("available") != string::npos) {
+        cout << "The requested book " << bookCode << " is available in the library." << endl;
+    } else {
+        handleServerErrorResponse(serverResponse, bookCode);
     }
 }
 
@@ -201,7 +231,7 @@ bool client::sendBookCodeRequest(const string &bookCode) {
         cerr << "Not all book code data was sent." << endl;
         return false;
     }
-    cout << userName << " sent the request to the Main Server." << endl;
+//    cout << userName << " sent the request to the Main Server." << endl;
     return true;
 }
 
@@ -211,7 +241,6 @@ string client::receiveServerResponse() {
     string response;
     if (len > 0) {
         response = string(buffer, len);
-        cout << "Response received from the Main Server on TCP port: " << SERVER_M_TCP_PORT << "." << endl;
     } else if (len == 0) {
         cerr << "Main Server has disconnected." << endl;
     } else {

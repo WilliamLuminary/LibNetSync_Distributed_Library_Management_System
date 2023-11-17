@@ -66,20 +66,23 @@ int initialize_udp_socket(int port) {
         return -1;
     }
 
-    cout << "Server S is up and running using UDP on port " << port << "." << endl;
+    cout << "Server " << SERVER_IDENTIFIER << " is up and running using UDP on port " << port << "." << endl;
     return sockfd;
 }
 
 
-int send_udp_data(int sockfd, const sockaddr_in &address, const string &data) {
+int send_udp_data(int sockfd, const sockaddr_in &address, const string &data, bool isError) {
     ssize_t sent_bytes = sendto(sockfd, data.c_str(), data.size(), 0,
                                 reinterpret_cast<const struct sockaddr *>(&address), sizeof(address));
     if (sent_bytes == -1) {
         cerr << "Sending UDP data failed: " << strerror(errno) << endl;
+        if (!isError) {
+            string errorMsg = "ERROR: " + string(strerror(errno));
+            sendto(sockfd, errorMsg.c_str(), errorMsg.size(), 0,
+                   reinterpret_cast<const struct sockaddr *>(&address), sizeof(address));
+        }
         return -1;
     }
-//    cout << "Server S finished sending the availability status of code " << extract_book_code(data)
-//         << " to the Main Server using UDP on port " << ntohs(address.sin_port) << "." << endl;
     return 0;
 }
 
@@ -107,29 +110,43 @@ int receive_udp_commands(int sockfd, unordered_map<string, int> &bookStatuses) {
         if (len > 0) {
             buffer[len] = '\0';
             string receivedData(buffer, len);
-            string bookCode = extract_book_code(receivedData);
-            cout << "Server S received " << bookCode << " code from the Main Server." << endl;
 
-            // Process the book request and prepare a response
-            string response = process_book_request(bookCode, bookStatuses);
+            if (receivedData.rfind("INVENTORY:", 0) == 0) {
 
-            // Before sending the response, print the desired message
-            cout << "Server S finished sending the availability status of code " << bookCode
-                 << " to the Main Server using UDP on port " << SERVER_M_UDP_PORT << "." << endl;
 
-            // Send the response back to the Main Server
-            if (!response.empty()) {
-                ssize_t sent_bytes = sendto(sockfd, response.c_str(), response.size(), 0,
-                                            reinterpret_cast<const struct sockaddr *>(&caddr), caddr_len);
-                if (sent_bytes < 0) {
-                    cerr << "Sending UDP response failed: " << strerror(errno) << endl;
-                }
+                string bookCode = extract_book_code(receivedData);
+                cout << "Server " << SERVER_IDENTIFIER << " received an inventory status request for code "
+                     << bookCode << "." << endl;
+
+
+                string response = process_inventory_request(bookCode, bookStatuses);
+
+                send_udp_data(sockfd, caddr, response);
+
+                cout << "Server " << SERVER_IDENTIFIER
+                     << " finished sending the inventory status to the Main server using UDP on port "
+                     << ntohs(caddr.sin_port) << "." << endl;
+            } else {
+                string bookCode = extract_book_code(receivedData);
+                cout << "Server " << SERVER_IDENTIFIER << " received " << bookCode
+                     << " code from the Main Server." << endl;
+
+                string response = process_book_request(bookCode, bookStatuses);
+
+                send_udp_data(sockfd, caddr, response);
+
+                cout << "Server " << SERVER_IDENTIFIER
+                     << " finished sending the availability status of code " << bookCode
+                     << " to the Main server using UDP on port "
+                     << ntohs(caddr.sin_port) << "." << endl;
             }
         } else if (len == -1) {
             cerr << "Receiving UDP data failed: " << strerror(errno) << endl;
             if (errno == EINTR) {
                 continue;
             }
+            string errorMsg = "ERROR: " + string(strerror(errno));
+            send_udp_data(sockfd, caddr, errorMsg, true);
             return -1;
         }
     }
@@ -140,22 +157,32 @@ int receive_udp_commands(int sockfd, unordered_map<string, int> &bookStatuses) {
 string process_book_request(const string &bookCode, unordered_map<string, int> &bookStatuses) {
     auto it = bookStatuses.find(bookCode);
     if (it != bookStatuses.end()) {
-        // Found the book code, check availability
         if (it->second > 0) {
-            // Decrement the count since the book is being checked out
+            string message = "The requested book is available:" + bookCode + "," + std::to_string(it->second);
             it->second -= 1;
-            // Update the book list file with new count here, if necessary
-            update_book_list_file(bookStatuses);
-
-            return "The requested book is available";
+            return message;
         } else {
             return "The requested book is not available";
         }
     } else {
-        // Book code not found
         return "Not able to find the book";
     }
 }
+
+string process_inventory_request(const string &bookCode, unordered_map<string, int> &bookStatuses) {
+    auto it = bookStatuses.find(bookCode);
+    string response;
+    if (it != bookStatuses.end()) {
+        response = INVENTORY_QUERY_PREFIX + bookCode + "," + std::to_string(it->second);
+    } else {
+        response = "Not able to find the book";
+    }
+
+    cout << "Server " << SERVER_IDENTIFIER << " received an inventory status request for code " << bookCode << "."
+         << endl;
+    return response;
+}
+
 
 void update_book_list_file(const unordered_map<string, int> &bookStatuses) {
     std::ofstream file(FILE_PATH, std::ios::trunc);
@@ -179,7 +206,6 @@ void update_book_list_file(const unordered_map<string, int> &bookStatuses) {
     }
 }
 
-
 unordered_map<string, int> read_book_list(const string &filepath) {
     std::ifstream file(filepath);
     string line;
@@ -191,7 +217,7 @@ unordered_map<string, int> read_book_list(const string &filepath) {
             string bookCode;
             int status;
             if (std::getline(ss, bookCode, ',')) {
-                ss >> status; // Directly read the integer status without ignoring any characters.
+                ss >> status;
                 bookStatuses[bookCode] = status;
             }
         }
@@ -217,8 +243,12 @@ string serialize_book_statuses(const unordered_map<string, int> &bookStatuses) {
 }
 
 string extract_book_code(const string &data) {
-    std::istringstream iss(data);
-    string bookCode;
-    getline(iss, bookCode, ',');
-    return bookCode;
+    if (data.rfind(INVENTORY_QUERY_PREFIX, 0) == 0) {
+        return data.substr(INVENTORY_QUERY_PREFIX.length());
+    } else {
+        std::istringstream iss(data);
+        string bookCode;
+        getline(iss, bookCode, ',');
+        return bookCode;
+    }
 }

@@ -16,6 +16,8 @@ const int SERVER_H_UDP_PORT = SERVER_H_UDP_BASE_PORT + LAST_3_DIGITS_YAXING_LI_U
 const int SERVER_M_UDP_BASE_PORT = 44000;
 const int SERVER_M_UDP_PORT = SERVER_M_UDP_BASE_PORT + LAST_3_DIGITS_YAXING_LI_USC_ID;
 const int BUFFER_SIZE = 1024;
+const std::string SERVER_IDENTIFIER = "H";
+const std::string INVENTORY_QUERY_PREFIX = "INVENTORY:";
 
 
 int initialize_udp_socket(int port);
@@ -37,5 +39,7 @@ std::string serialize_book_statuses(const std::unordered_map<std::string, int> &
 sockaddr_in create_address(int port, const std::string &ip_address);
 
 std::string extract_book_code(const std::string &data);
+
+std::string process_inventory_request(const std::string &bookCode, std::unordered_map<std::string, int> &bookStatuses);
 
 #endif

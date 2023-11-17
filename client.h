@@ -47,6 +47,13 @@ private:
     std::string encrypt(const std::string &input);
 
     int getLocalPort();
+
+    void parseAdminResponse(const std::string &serverResponse, const std::string &bookCode);
+
+    void parseNonAdminResponse(const std::string &serverResponse, const std::string &bookCode);
+
+    void handleServerErrorResponse(const std::string &serverResponse, const std::string &bookCode);
+
 };
 
 #endif
