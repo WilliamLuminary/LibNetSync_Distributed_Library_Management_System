@@ -39,7 +39,6 @@ bool authenticate_client(int client_fd, const std::unordered_map<std::string, st
 
 bool handle_authenticated_tcp_requests(int client_fd, std::unordered_map<std::string, int> &bookStatuses, int udp_fd);
 
-
 std::string determineServerIdentifier(const std::string &bookCode);
 
 bool forwardRequestToUdpServer(const std::string &serverIdentifier, const std::string &bookCode, int udpSocket);
