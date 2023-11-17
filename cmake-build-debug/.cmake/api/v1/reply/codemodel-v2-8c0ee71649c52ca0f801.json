@@ -1,0 +1,96 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.26"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "LibNetSync_Distributed_Library_Management_System",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "client::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-client-Debug-f8ef9e94f4f87e78be16.json",
+					"name" : "client",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "serverH::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-serverH-Debug-2d7f8af343a0a4a13fe8.json",
+					"name" : "serverH",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "serverL::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-serverL-Debug-19abd68d1de31bab1c42.json",
+					"name" : "serverL",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "serverM::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-serverM-Debug-89c576282d2ecb72ca5f.json",
+					"name" : "serverM",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "serverS::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-serverS-Debug-4bb12abf63d73ec6be48.json",
+					"name" : "serverS",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/william/Library/Mobile Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System/cmake-build-debug",
+		"source" : "/Users/william/Library/Mobile Documents/com~apple~CloudDocs/WorkSpace/USC/EE_450/Socket_Project/LibNetSync-Distributed_Library_Management_System"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 5
+	}
+}
