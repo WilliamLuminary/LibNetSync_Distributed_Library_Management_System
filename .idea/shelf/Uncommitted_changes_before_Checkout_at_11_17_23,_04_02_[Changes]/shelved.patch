@@ -1,0 +1,76 @@
+Index: cmake-build-debug/.ninja_log
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+># ninja log v5\n5\t1227\t1699927271118240906\tCMakeFiles/ServerS.dir/serverS.cpp.o\tc0dee8066d3b536\n1\t61\t1699946211503402285\tbuild.ninja\t76188c2e5ad2ed0a\n1\t207\t1698973557083506714\tCMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverH.cpp.o\t334b3af2234f709f\n4\t887\t1699927913838134489\tCMakeFiles/ServerL.dir/serverL.cpp.o\t395dccc803ed6e6b\n5\t2902\t1700122927364797646\tCMakeFiles/serverM.dir/serverM.cpp.o\ta83ab1ab768fd663\n6\t934\t1699927961639887305\tCMakeFiles/ServerH.dir/serverH.cpp.o\t371fbfa7e7695e18\n1\t207\t1698973557083506839\tCMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverL.cpp.o\t7be0e542e402d48d\n1\t207\t1698973557083474380\tCMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverS.cpp.o\t3a9aea6d30d8432c\n888\t931\t1699927914050819713\tServerL\t41348560a8b6caa8\n6\t607\t1699861878618586636\tCMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/client.cpp.o\t1d79d431df61b715\n5\t606\t1699861878616953394\tCMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverM.cpp.o\tf7f13068b2d39295\n5\t803\t1700049082527074547\tCMakeFiles/client.dir/client.cpp.o\td906236e838d0c62\n1230\t1295\t1699927271361935264\tServerS\tbf34a68dc007331f\n749\t796\t1700015909147084340\tserverL\te147d5308373c7c1\n805\t855\t1700049082581971036\tclient\t84c69ef23d918a13\n4\t434\t1699928140799110000\tCMakeFiles/Client.dir/client.cpp.o\t88a3ef6c80256eae\n1\t513\t1698973557389484613\tCMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/main.cpp.o\te6134f6732b3f667\n450\t651\t1700118620753788679\tserverS\t5fa5e3bcf131f1b9\n4\t449\t1700118620550758280\tCMakeFiles/serverS.dir/serverS.cpp.o\tfd67665fa903236e\n828\t878\t1699928243499558577\tServerM\tc935b034fa5a9117\n435\t475\t1699928140841931570\tClient\t9660e956669a0daf\n935\t997\t1699927961706340248\tServerH\t6a023d84f848074b\n15\t748\t1700015909096718609\tCMakeFiles/serverL.dir/serverL.cpp.o\t5f2bf1ee396b2503\n2907\t3101\t1700122927563799740\tserverM\te50d53d63d7fc8ff\n4\t699\t1700015911158280359\tCMakeFiles/serverH.dir/serverH.cpp.o\t98ec41fddef2dc34\n700\t748\t1700015911210659335\tserverH\t178dfa09c51c58fa\n4\t745\t1700122941728257430\tCMakeFiles/serverS.dir/serverS.cpp.o\tfd67665fa903236e\n746\t787\t1700122941771880766\tserverS\t5fa5e3bcf131f1b9\n4\t638\t1700122952664035063\tCMakeFiles/client.dir/client.cpp.o\td906236e838d0c62\n640\t679\t1700122952706407305\tclient\t84c69ef23d918a13\n5\t2935\t1700127169540708218\tCMakeFiles/serverM.dir/serverM.cpp.o\ta83ab1ab768fd663\n2943\t3134\t1700127169740886175\tserverM\te50d53d63d7fc8ff\n4\t809\t1700130540764048116\tCMakeFiles/serverM.dir/serverM.cpp.o\ta83ab1ab768fd663\n819\t1006\t1700130540962853422\tserverM\te50d53d63d7fc8ff\n4\t471\t1700130543873130015\tCMakeFiles/serverS.dir/serverS.cpp.o\tfd67665fa903236e\n472\t515\t1700130543921627270\tserverS\t5fa5e3bcf131f1b9\n5\t1107\t1700130594219105672\tCMakeFiles/serverM.dir/serverM.cpp.o\ta83ab1ab768fd663\n1116\t1206\t1700130594321728100\tserverM\te50d53d63d7fc8ff\n6\t1038\t1700130683482821484\tCMakeFiles/serverM.dir/serverM.cpp.o\ta83ab1ab768fd663\n1048\t1284\t1700130683730095959\tserverM\te50d53d63d7fc8ff\n4\t1007\t1700130697455699803\tCMakeFiles/serverS.dir/serverS.cpp.o\tfd67665fa903236e\n1009\t1056\t1700130697507120331\tserverS\t5fa5e3bcf131f1b9\n7\t704\t1700130844465134185\tCMakeFiles/serverM.dir/serverM.cpp.o\ta83ab1ab768fd663\n715\t883\t1700130844645174093\tserverM\te50d53d63d7fc8ff\n19\t800\t1700132420987161676\tCMakeFiles/serverM.dir/serverM.cpp.o\ta83ab1ab768fd663\n808\t978\t1700132421164841451\tserverM\te50d53d63d7fc8ff\n4\t445\t1700132424254241009\tCMakeFiles/serverS.dir/serverS.cpp.o\tfd67665fa903236e\n447\t483\t1700132424298501172\tserverS\t5fa5e3bcf131f1b9\n20\t803\t1700132777699077383\tCMakeFiles/serverM.dir/serverM.cpp.o\ta83ab1ab768fd663\n812\t979\t1700132777876468701\tserverM\te50d53d63d7fc8ff\n8\t683\t1700132935907491102\tCMakeFiles/serverS.dir/serverS.cpp.o\tfd67665fa903236e\n695\t862\t1700132936087298492\tserverS\t5fa5e3bcf131f1b9\n5\t1056\t1700133160688646397\tCMakeFiles/serverM.dir/serverM.cpp.o\ta83ab1ab768fd663\n1067\t1253\t1700133160888133193\tserverM\te50d53d63d7fc8ff\n4\t478\t1700133169091181092\tCMakeFiles/client.dir/client.cpp.o\td906236e838d0c62\n480\t532\t1700133169146661702\tclient\t84c69ef23d918a13\n
+===================================================================
+diff --git a/cmake-build-debug/.ninja_log b/cmake-build-debug/.ninja_log
+--- a/cmake-build-debug/.ninja_log	
++++ b/cmake-build-debug/.ninja_log	
+@@ -1,57 +1,27 @@
+ # ninja log v5
++1	207	1698973557083506714	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverH.cpp.o	334b3af2234f709f
++1	61	1700222454819755765	build.ninja	76188c2e5ad2ed0a
+ 5	1227	1699927271118240906	CMakeFiles/ServerS.dir/serverS.cpp.o	c0dee8066d3b536
+-1	61	1699946211503402285	build.ninja	76188c2e5ad2ed0a
+-1	207	1698973557083506714	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverH.cpp.o	334b3af2234f709f
++6	934	1699927961639887305	CMakeFiles/ServerH.dir/serverH.cpp.o	371fbfa7e7695e18
++5	1056	1700133160688646397	CMakeFiles/serverM.dir/serverM.cpp.o	a83ab1ab768fd663
+ 4	887	1699927913838134489	CMakeFiles/ServerL.dir/serverL.cpp.o	395dccc803ed6e6b
+-5	2902	1700122927364797646	CMakeFiles/serverM.dir/serverM.cpp.o	a83ab1ab768fd663
+-6	934	1699927961639887305	CMakeFiles/ServerH.dir/serverH.cpp.o	371fbfa7e7695e18
+ 1	207	1698973557083506839	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverL.cpp.o	7be0e542e402d48d
+ 1	207	1698973557083474380	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverS.cpp.o	3a9aea6d30d8432c
+ 888	931	1699927914050819713	ServerL	41348560a8b6caa8
+ 6	607	1699861878618586636	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/client.cpp.o	1d79d431df61b715
+ 5	606	1699861878616953394	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/serverM.cpp.o	f7f13068b2d39295
+-5	803	1700049082527074547	CMakeFiles/client.dir/client.cpp.o	d906236e838d0c62
++4	478	1700133169091181092	CMakeFiles/client.dir/client.cpp.o	d906236e838d0c62
+ 1230	1295	1699927271361935264	ServerS	bf34a68dc007331f
+ 749	796	1700015909147084340	serverL	e147d5308373c7c1
+-805	855	1700049082581971036	client	84c69ef23d918a13
++480	532	1700133169146661702	client	84c69ef23d918a13
+ 4	434	1699928140799110000	CMakeFiles/Client.dir/client.cpp.o	88a3ef6c80256eae
+ 1	513	1698973557389484613	CMakeFiles/LibNetSync_Distributed_Library_Management_System.dir/main.cpp.o	e6134f6732b3f667
+-450	651	1700118620753788679	serverS	5fa5e3bcf131f1b9
+-4	449	1700118620550758280	CMakeFiles/serverS.dir/serverS.cpp.o	fd67665fa903236e
+-828	878	1699928243499558577	ServerM	c935b034fa5a9117
++695	862	1700132936087298492	serverS	5fa5e3bcf131f1b9
++8	683	1700132935907491102	CMakeFiles/serverS.dir/serverS.cpp.o	fd67665fa903236e
+ 435	475	1699928140841931570	Client	9660e956669a0daf
++828	878	1699928243499558577	ServerM	c935b034fa5a9117
+ 935	997	1699927961706340248	ServerH	6a023d84f848074b
+ 15	748	1700015909096718609	CMakeFiles/serverL.dir/serverL.cpp.o	5f2bf1ee396b2503
+-2907	3101	1700122927563799740	serverM	e50d53d63d7fc8ff
++1067	1253	1700133160888133193	serverM	e50d53d63d7fc8ff
+ 4	699	1700015911158280359	CMakeFiles/serverH.dir/serverH.cpp.o	98ec41fddef2dc34
+ 700	748	1700015911210659335	serverH	178dfa09c51c58fa
+-4	745	1700122941728257430	CMakeFiles/serverS.dir/serverS.cpp.o	fd67665fa903236e
+-746	787	1700122941771880766	serverS	5fa5e3bcf131f1b9
+-4	638	1700122952664035063	CMakeFiles/client.dir/client.cpp.o	d906236e838d0c62
+-640	679	1700122952706407305	client	84c69ef23d918a13
+-5	2935	1700127169540708218	CMakeFiles/serverM.dir/serverM.cpp.o	a83ab1ab768fd663
+-2943	3134	1700127169740886175	serverM	e50d53d63d7fc8ff
+-4	809	1700130540764048116	CMakeFiles/serverM.dir/serverM.cpp.o	a83ab1ab768fd663
+-819	1006	1700130540962853422	serverM	e50d53d63d7fc8ff
+-4	471	1700130543873130015	CMakeFiles/serverS.dir/serverS.cpp.o	fd67665fa903236e
+-472	515	1700130543921627270	serverS	5fa5e3bcf131f1b9
+-5	1107	1700130594219105672	CMakeFiles/serverM.dir/serverM.cpp.o	a83ab1ab768fd663
+-1116	1206	1700130594321728100	serverM	e50d53d63d7fc8ff
+-6	1038	1700130683482821484	CMakeFiles/serverM.dir/serverM.cpp.o	a83ab1ab768fd663
+-1048	1284	1700130683730095959	serverM	e50d53d63d7fc8ff
+-4	1007	1700130697455699803	CMakeFiles/serverS.dir/serverS.cpp.o	fd67665fa903236e
+-1009	1056	1700130697507120331	serverS	5fa5e3bcf131f1b9
+-7	704	1700130844465134185	CMakeFiles/serverM.dir/serverM.cpp.o	a83ab1ab768fd663
+-715	883	1700130844645174093	serverM	e50d53d63d7fc8ff
+-19	800	1700132420987161676	CMakeFiles/serverM.dir/serverM.cpp.o	a83ab1ab768fd663
+-808	978	1700132421164841451	serverM	e50d53d63d7fc8ff
+-4	445	1700132424254241009	CMakeFiles/serverS.dir/serverS.cpp.o	fd67665fa903236e
+-447	483	1700132424298501172	serverS	5fa5e3bcf131f1b9
+-20	803	1700132777699077383	CMakeFiles/serverM.dir/serverM.cpp.o	a83ab1ab768fd663
+-812	979	1700132777876468701	serverM	e50d53d63d7fc8ff
+-8	683	1700132935907491102	CMakeFiles/serverS.dir/serverS.cpp.o	fd67665fa903236e
+-695	862	1700132936087298492	serverS	5fa5e3bcf131f1b9
+-5	1056	1700133160688646397	CMakeFiles/serverM.dir/serverM.cpp.o	a83ab1ab768fd663
+-1067	1253	1700133160888133193	serverM	e50d53d63d7fc8ff
+-4	478	1700133169091181092	CMakeFiles/client.dir/client.cpp.o	d906236e838d0c62
+-480	532	1700133169146661702	client	84c69ef23d918a13

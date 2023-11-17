@@ -1,0 +1,10 @@
+Index: Readme.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Readme.md b/Readme.md
+--- a/Readme.md	(revision 6a0cda023e195b3201317e2117a18c4aa0f52668)
++++ b/Readme.md	(date 1700220877155)
+@@ -1,0 +1,1 @@
++# LibNetSync_Distributed_Library_Management_System

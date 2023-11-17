@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
+  <component name="CMakeReloadState">
+    <option name="reloaded" value="true" />
+  </component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="Project" targetName="LibNetSync_Distributed_Library_Management_System" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="df5117b3-c718-4185-b736-735c358a4ed3" name="Changes" comment="Fix git problems">
+      <change afterPath="$PROJECT_DIR$/Readme.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--follow-tags" />
+        <option name="title" value="Current Branch" />
+      </GitPushTagMode>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Improve" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;WilliamLuminary&quot;
+  }
+}</component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="5" />
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="master" />
+                    <option name="lastUsedInstant" value="1700224707" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="Improve" />
+                    <option name="lastUsedInstant" value="1700222531" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="6e297a6b-b0fb-4011-ba3a-3476a4cd9935" />
+        <option name="url" value="https://github.com/WilliamLuminary/LibNetSync_Distributed_Library_Management_System.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2023" />
+    <option name="minorVersion" value="2.2" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2Xdql6rj6vOfsTSD8XmY6RuAQLs" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="false" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showVisibilityIcons" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "WebServerToolWindowFactoryState": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "Rebasing master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "project.scopes",
+    "structure.view.defaults.are.configured": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="CMake Debug.LibNetSync_Distributed_Library_Management_System">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LibNetSync_Distributed_Library_Management_System" type="CMakeListConfigurationType" factoryName="CMakeListConfigurationFactory" temporary="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="client" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="LibNetSync_Distributed_Library_Management_System" TARGET_NAME="client" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="LibNetSync_Distributed_Library_Management_System" RUN_TARGET_NAME="client">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="serverH" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="LibNetSync_Distributed_Library_Management_System" TARGET_NAME="serverH" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="LibNetSync_Distributed_Library_Management_System" RUN_TARGET_NAME="serverH">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="serverL" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="LibNetSync_Distributed_Library_Management_System" TARGET_NAME="serverL" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="LibNetSync_Distributed_Library_Management_System" RUN_TARGET_NAME="serverL">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="serverM" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="LibNetSync_Distributed_Library_Management_System" TARGET_NAME="serverM" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="LibNetSync_Distributed_Library_Management_System" RUN_TARGET_NAME="serverM">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="serverS" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="LibNetSync_Distributed_Library_Management_System" TARGET_NAME="serverS" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="LibNetSync_Distributed_Library_Management_System" RUN_TARGET_NAME="serverS">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.client" />
+      <item itemvalue="CMake Application.serverH" />
+      <item itemvalue="CMake Application.serverL" />
+      <item itemvalue="CMake Application.serverM" />
+      <item itemvalue="CMake Application.serverS" />
+      <item itemvalue="CMake Debug.LibNetSync_Distributed_Library_Management_System" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="CMake Debug.LibNetSync_Distributed_Library_Management_System" />
+        <item itemvalue="CMake Debug.LibNetSync_Distributed_Library_Management_System" />
+        <item itemvalue="CMake Debug.LibNetSync_Distributed_Library_Management_System" />
+        <item itemvalue="CMake Debug.LibNetSync_Distributed_Library_Management_System" />
+        <item itemvalue="CMake Debug.LibNetSync_Distributed_Library_Management_System" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="df5117b3-c718-4185-b736-735c358a4ed3" name="Changes" comment="" />
+      <created>1698969468075</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1698969468075</updated>
+      <workItem from="1698969470229" duration="271000" />
+      <workItem from="1698969768408" duration="8042000" />
+      <workItem from="1699836756391" duration="4187000" />
+      <workItem from="1699853977881" duration="48944000" />
+      <workItem from="1699946459798" duration="17062000" />
+      <workItem from="1700018190853" duration="31760000" />
+      <workItem from="1700180964457" duration="9372000" />
+      <workItem from="1700198871955" duration="1911000" />
+      <workItem from="1700213992929" duration="3233000" />
+      <workItem from="1700218800146" duration="5272000" />
+    </task>
+    <task id="LOCAL-00001" summary="Initial and make a draft of serverM.cpp, serverS.cpp, and client.cpp.">
+      <option name="closed" value="true" />
+      <created>1699866898250</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1699866898250</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Add functions to read and send info about book lists.">
+      <option name="closed" value="true" />
+      <created>1699873315099</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1699873315099</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Restructure codes">
+      <option name="closed" value="true" />
+      <created>1699873748910</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1699873748910</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Add Phase 2, 3, and 4.">
+      <option name="closed" value="true" />
+      <created>1699946495587</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1699946495587</updated>
+    </task>
+    <task id="LOCAL-00005" summary="1. Fix bugs of authentication&#10;2. Change the output of all components following the instruction">
+      <option name="closed" value="true" />
+      <created>1700010062364</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1700010062364</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Fix all output and bugs">
+      <option name="closed" value="true" />
+      <created>1700181627695</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1700181627695</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Go back to the previous correct code">
+      <option name="closed" value="true" />
+      <created>1700181811270</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1700181811270</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Improve the code of client.cpp">
+      <option name="closed" value="true" />
+      <created>1700198494505</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1700198494505</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Set the `.gitignore` file.">
+      <option name="closed" value="true" />
+      <created>1700199009127</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1700199009127</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Set the `.gitignore` file.">
+      <option name="closed" value="true" />
+      <created>1700199228283</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1700199228283</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Revise .gitignore">
+      <option name="closed" value="true" />
+      <created>1700199412323</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1700199412324</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Revise .gitignore">
+      <option name="closed" value="true" />
+      <created>1700199724454</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1700199724454</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Revise .gitignore">
+      <option name="closed" value="true" />
+      <created>1700199902498</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1700199902498</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Fix bugs">
+      <option name="closed" value="true" />
+      <created>1700214453361</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1700214453361</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Fix bugs">
+      <option name="closed" value="true" />
+      <created>1700217515365</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1700217515365</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Finish README.md and fix problems in Makefile.">
+      <option name="closed" value="true" />
+      <created>1700219956111</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1700219956111</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Finish README.md.">
+      <option name="closed" value="true" />
+      <created>1700221370844</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1700221370844</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Finish README.md.">
+      <option name="closed" value="true" />
+      <created>1700222267003</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1700222267003</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Fix git problems">
+      <option name="closed" value="true" />
+      <created>1700224657531</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1700224657531</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Fix git problems">
+      <option name="closed" value="true" />
+      <created>1700224853246</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1700224853246</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VCPKGProject">
+    <isAutomaticEditVcpkgJson value="false" />
+    <isAutomaticCheckingOnLaunch value="false" />
+    <isAutomaticFoundErrors value="true" />
+    <isAutomaticFoundErrors value="true" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial and make a draft of serverM.cpp, serverS.cpp, and client.cpp." />
+    <MESSAGE value="Add functions to read and send info about book lists." />
+    <MESSAGE value="Restructure codes" />
+    <MESSAGE value="Add Phase 2, 3, and 4." />
+    <MESSAGE value="1. Fix bugs of authentication&#10;2. Change the output of all components following the instruction" />
+    <MESSAGE value="Fix all output and bugs" />
+    <MESSAGE value="Go back to the previous correct code" />
+    <MESSAGE value="Improve the code of client.cpp" />
+    <MESSAGE value="Set the `.gitignore` file." />
+    <MESSAGE value="Revise .gitignore" />
+    <MESSAGE value="Fix bugs" />
+    <MESSAGE value="Finish README.md and fix problems in Makefile." />
+    <MESSAGE value="Finish README.md." />
+    <MESSAGE value="Fix git problems" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix git problems" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
