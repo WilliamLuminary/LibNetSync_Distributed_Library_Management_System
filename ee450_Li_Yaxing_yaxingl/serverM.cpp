@@ -18,7 +18,9 @@
 #include <arpa/inet.h>
 #include <sys/wait.h>
 #include <iostream>
-
+#include <algorithm>
+#include <cctype>
+#include <string>
 
 using std::cout;
 using std::cerr;
