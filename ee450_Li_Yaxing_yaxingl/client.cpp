@@ -66,7 +66,10 @@ int client::createTcpSocket() {
 }
 
 bool client::connectToServer() {
-    sockaddr_in sock_addr_in{};
+//    sockaddr_in sock_addr_in{};
+    sockaddr_in sock_addr_in;
+    memset(&sock_addr_in, 0, sizeof(sock_addr_in));
+
     sock_addr_in.sin_family = AF_INET;
     sock_addr_in.sin_port = htons(SERVER_M_TCP_PORT);
     if (inet_pton(AF_INET, LOCALHOST_IP, &sock_addr_in.sin_addr) <= 0) {
@@ -123,7 +126,9 @@ bool client::authenticateAndHandleCommunication() {
 
 bool client::receiveAuthenticationResult(const string &username) {
     char buffer[BUFFER_SIZE] = {0};
-    sockaddr_in addr{};
+//    sockaddr_in addr{};
+    sockaddr_in addr;
+    memset(&addr, 0, sizeof(addr));
     socklen_t addr_len = sizeof(addr);
     if (getsockname(socket_fd, (struct sockaddr *) &addr, &addr_len) == -1) {
         cerr << "Error getting peer name: " << strerror(errno) << endl;
@@ -276,7 +281,9 @@ string client::encrypt(const string &input) {
 }
 
 int client::getHostPort(int socket_fd) {
-    sockaddr_in sAddr{};
+//    sockaddr_in sAddr{};
+    sockaddr_in sAddr;
+    memset(&sAddr, 0, sizeof(sAddr));
     socklen_t addrLen = sizeof(sAddr);
     if (getsockname(socket_fd, (struct sockaddr *) &sAddr, &addrLen) == -1) {
         cerr << "Error getting client port: " << strerror(errno) << endl;
