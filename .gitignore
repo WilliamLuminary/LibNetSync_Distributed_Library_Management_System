@@ -2,6 +2,9 @@
 
 cmake-build-debug/
 
-CMakeLists.txt
+ee450_Li_Yaxing_yaxingl/CMakeLists.txt
 
 *.o
+
+ee450_Li_Yaxing_yaxingl/*.o
+
