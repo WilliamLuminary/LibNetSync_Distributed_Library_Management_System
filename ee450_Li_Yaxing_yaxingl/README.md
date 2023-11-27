@@ -33,13 +33,11 @@ included.
 - Book codes are prefixed with a letter indicating the server ('S', 'L', 'H').
 - Responses from servers regarding book availability follow a predefined format.
 
-
 ## Idiosyncrasies
 
 - The system assumes reliable network connections.
 - The backend servers read their respective `.txt` files once at startup.
 - If a client requests a book multiple times, the inventory updates correctly without re-reading the database file.
-- It must start `serverM` first, then other backend servers, and `client` at last.
 
 ## Reused Code
 
@@ -70,6 +68,6 @@ specifications and guided by the Beej’s Guide to Network Programming.
 
 ### Extra Credit: Inventory Management
 
-- Implemented inventory management accessible by library staff with credentials (Username: admin, Password: Admin).
+- Implemented inventory management accessible by library staff with credentials (Username: admin/ Admin, Password: Admin).
 
-  **It works only for `admin`.**
+  **It works for both `Admin` and `admin`.**
