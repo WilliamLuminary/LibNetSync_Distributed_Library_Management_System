@@ -19,7 +19,7 @@ serverH: serverH.cpp serverH.h
 	#$(CXX) $(CXXFLAGS) -o serverH serverH.cpp
 	$(CXX) -o serverH serverH.cpp
 
-client: client.cpp ee450_Li_Yaxing_yaxingl/client.h
+client: client.cpp client.h
 	#$(CXX) $(CXXFLAGS) -o client client.cpp
 	$(CXX) -o client client.cpp
 
