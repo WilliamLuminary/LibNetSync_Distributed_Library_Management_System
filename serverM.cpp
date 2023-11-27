@@ -48,20 +48,13 @@ int main() {
 
     while (true) {
         int client_fd = accept_connection(tcp_fd);
-        if (client_fd < 0) continue; // If accept failed, continue to the next iteration.
+        if (client_fd < 0) continue;
 
         while (true) {
             if (authenticate_client(client_fd, memberInfo)) {
-                // Authentication successful, proceed to handle requests.
                 if (!handle_authenticated_tcp_requests(client_fd, combinedBookStatuses, udp_fd)) {
-                    // If false is returned, it means the client disconnected or an error occurred.
-                    break; // Exit the inner loop and close the socket.
+                    break;
                 }
-            } else {
-                // Authentication failed, but the connection is still open.
-                // The client can try to authenticate again.
-                // You should implement a mechanism to` exit this loop after a certain number of failed attempts
-                // to prevent an endless loop of failed authentications.
             }
         }
         close(client_fd);
