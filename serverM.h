@@ -24,7 +24,7 @@ const int SERVER_M_TCP_BASE_PORT = 45000;
 const int SERVER_M_TCP_PORT = SERVER_M_TCP_BASE_PORT + LAST_3_DIGITS_YAXING_LI_USC_ID;
 const int LISTEN_BACK_LOG = 128;
 const int BUFFER_SIZE = 1024;
-const std::string ENCRYPTED_ADMIN_USERNAME = "Firns";
+const std::string ENCRYPTED_ADMIN_USERNAME = "firns";
 const std::string ENCRYPTED_ADMIN_PASSWORD = "Firns";
 
 bool adminFlag = false;
@@ -37,7 +37,7 @@ int accept_connection(int server_fd);
 
 bool authenticate_client(int client_fd, const std::unordered_map<std::string, std::string> &memberInfo);
 
-std::string toLowercase(const std::string& str);
+//std::string toLowercase(const std::string& str);
 
 bool handle_authenticated_tcp_requests(int client_fd, std::unordered_map<std::string, int> &bookStatuses, int udp_fd);
 
