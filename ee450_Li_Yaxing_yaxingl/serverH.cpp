@@ -69,7 +69,10 @@ int send_udp_data(int sock_fd, const sockaddr_in &address, const string &data) {
 }
 
 sockaddr_in create_address(int port, const string &ip_address) {
-    sockaddr_in address{};
+//    sockaddr_in address{};
+    sockaddr_in address;
+    memset(&address, 0, sizeof(address));
+
     address.sin_family = AF_INET;
     address.sin_port = htons(port);
     if (!ip_address.empty()) {
@@ -82,7 +85,10 @@ sockaddr_in create_address(int port, const string &ip_address) {
 
 int receive_udp_commands(int sock_fd, unordered_map<string, int> &bookStatuses) {
     char buffer[BUFFER_SIZE];
-    sockaddr_in caddr{};
+//    sockaddr_in caddr{};
+    sockaddr_in caddr;
+    memset(&caddr, 0, sizeof(caddr));
+
     socklen_t caddr_len = sizeof(caddr);
 
     int portNum = getHostPort(sock_fd);
@@ -186,7 +192,10 @@ std::string extract_book_code(const std::string& data) {
 }
 
 int getHostPort(int socket_fd) {
-    sockaddr_in sAddr{};
+//    sockaddr_in sAddr{};
+    sockaddr_in sAddr;
+    memset(&sAddr, 0, sizeof(sAddr));
+
     socklen_t addrLen = sizeof(sAddr);
     if (getsockname(socket_fd, (struct sockaddr *) &sAddr, &addrLen) == -1) {
         cerr << "Error getting client port: " << strerror(errno) << endl;

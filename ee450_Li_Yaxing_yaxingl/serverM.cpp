@@ -79,7 +79,10 @@ int initialize_socket(int domain, int type, int protocol, int port, bool reusead
         setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &opt_val, sizeof(opt_val));
     }
 
-    sockaddr_in addr{};
+//    sockaddr_in addr{};
+    sockaddr_in addr;
+    memset(&addr, 0, sizeof(addr));
+
     addr.sin_family = domain;
     addr.sin_port = htons(port);
     addr.sin_addr.s_addr = INADDR_ANY;
@@ -102,7 +105,10 @@ int initialize_socket(int domain, int type, int protocol, int port, bool reusead
 }
 
 int accept_connection(int server_fd) {
-    sockaddr_in client_addr{};
+//    sockaddr_in client_addr{};
+    sockaddr_in client_addr;
+    memset(&client_addr, 0, sizeof(client_addr));
+
     socklen_t client_addr_len = sizeof(client_addr);
     int client_fd = accept(server_fd, reinterpret_cast<struct sockaddr *>(&client_addr), &client_addr_len);
     if (client_fd == -1) {
@@ -120,7 +126,10 @@ int accept_connection(int server_fd) {
 bool authenticate_client(int client_fd, const unordered_map<string, string> &memberInfo) {
     adminFlag = false;
 
-    sockaddr_in addr{};
+//    sockaddr_in addr{};
+    sockaddr_in addr;
+    memset(&addr, 0, sizeof(addr));
+
     socklen_t addr_len = sizeof(addr);
     if (getsockname(client_fd, (struct sockaddr *) &addr, &addr_len) == -1) {
         cerr << "Error getting socket name: " << strerror(errno) << endl;
@@ -183,7 +192,10 @@ bool handle_authenticated_tcp_requests(int client_fd, unordered_map<string, int>
     char buffer[BUFFER_SIZE];
     ssize_t len;
 
-    sockaddr_in addr{};
+//    sockaddr_in addr{};
+    sockaddr_in addr;
+    memset(&addr, 0, sizeof(addr));
+
     socklen_t addr_len = sizeof(addr);
     if (getsockname(client_fd, (struct sockaddr *) &addr, &addr_len) == -1) {
         cerr << "Error getting socket name: " << strerror(errno) << endl;
@@ -258,7 +270,10 @@ string determineServerIdentifier(const string &bookCode) {
 }
 
 bool forwardRequestToUdpServer(const string &serverIdentifier, const string &bookCode, int udpSocket) {
-    struct sockaddr_in backendServerAddr{};
+//    struct sockaddr_in backendServerAddr{};
+    struct sockaddr_in backendServerAddr;
+    memset(&backendServerAddr, 0, sizeof(backendServerAddr));
+
     backendServerAddr.sin_family = AF_INET;
     backendServerAddr.sin_addr.s_addr = inet_addr(LOCALHOST_IP);
 
@@ -284,7 +299,10 @@ bool forwardRequestToUdpServer(const string &serverIdentifier, const string &boo
 
 string receiveResponseFromUdpServer(int udpSocket) {
     char buffer[BUFFER_SIZE];
-    struct sockaddr_in fromAddr{};
+//    struct sockaddr_in fromAddr{};
+    struct sockaddr_in fromAddr;
+    memset(&fromAddr, 0, sizeof(fromAddr));
+
     socklen_t fromAddrLen = sizeof(fromAddr);
 
     ssize_t recvLen = recvfrom(udpSocket, buffer, BUFFER_SIZE, 0, (struct sockaddr *) &fromAddr, &fromAddrLen);
@@ -315,7 +333,10 @@ void process_udp_server(int server_fd, unordered_map<string, int> &bookStatuses)
     bool receivedS = false, receivedL = false, receivedH = false;
     char buffer[BUFFER_SIZE];
 
-    struct sockaddr_in sender_addr{};
+//    struct sockaddr_in sender_addr{};
+    struct sockaddr_in sender_addr;
+    memset(&sender_addr, 0, sizeof(sender_addr));
+
     socklen_t sender_addr_len = sizeof(sender_addr);
 
     while (!receivedS || !receivedL || !receivedH) {
@@ -396,7 +417,10 @@ unordered_map<string, string> read_member(const string &filepath) {
 }
 
 int getHostPort(int socket_fd) {
-    sockaddr_in sAddr{};
+//    sockaddr_in sAddr{};
+    sockaddr_in sAddr;
+    memset(&sAddr, 0, sizeof(sAddr));
+
     socklen_t addrLen = sizeof(sAddr);
     if (getsockname(socket_fd, (struct sockaddr *) &sAddr, &addrLen) == -1) {
         cerr << "Error getting client port: " << strerror(errno) << endl;
