@@ -148,6 +148,9 @@ bool authenticate_client(int client_fd, const unordered_map<string, string> &mem
     auto it = memberInfo.find(encryptedUsername);
     string response;
 
+    string encryptedUsernameLower = toLowercase(encryptedUsername);
+    string encryptedAdminUsernameLower = toLowercase(ENCRYPTED_ADMIN_USERNAME);
+
     if (it == memberInfo.end()) {
         cout << encryptedUsername << " is not registered. Send a reply to the client." << endl;
         response = encryptedUsername + " is not registered.";
@@ -158,11 +161,20 @@ bool authenticate_client(int client_fd, const unordered_map<string, string> &mem
     } else {
         cout << "Password" << encryptedPassword << " matches the username. Send a reply to the client." << endl;
         response = "Login successful.";
-        adminFlag = (encryptedUsername == ENCRYPTED_ADMIN_USERNAME && encryptedPassword == ENCRYPTED_ADMIN_PASSWORD);
+//        adminFlag = (encryptedUsername == ENCRYPTED_ADMIN_USERNAME && encryptedPassword == ENCRYPTED_ADMIN_PASSWORD);
+        adminFlag = ((encryptedUsername == ENCRYPTED_ADMIN_USERNAME || encryptedUsernameLower == encryptedAdminUsernameLower) &&
+                     encryptedPassword == ENCRYPTED_ADMIN_PASSWORD);
     }
 
     send(client_fd, response.c_str(), response.size(), 0);
     return response == "Login successful.";
+}
+
+string toLowercase(const string& str) {
+    string lowercaseStr = str;
+    std::transform(lowercaseStr.begin(), lowercaseStr.end(), lowercaseStr.begin(),
+                   [](unsigned char c){ return std::tolower(c); });
+    return lowercaseStr;
 }
 
 bool handle_authenticated_tcp_requests(int client_fd, unordered_map<string, int> &bookStatuses, int udp_fd) {

@@ -37,6 +37,8 @@ int accept_connection(int server_fd);
 
 bool authenticate_client(int client_fd, const std::unordered_map<std::string, std::string> &memberInfo);
 
+std::string toLowercase(const std::string& str);
+
 bool handle_authenticated_tcp_requests(int client_fd, std::unordered_map<std::string, int> &bookStatuses, int udp_fd);
 
 std::string determineServerIdentifier(const std::string &bookCode);

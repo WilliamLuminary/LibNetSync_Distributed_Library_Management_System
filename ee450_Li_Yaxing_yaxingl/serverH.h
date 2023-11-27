@@ -11,7 +11,7 @@
 #include <unordered_map>
 
 
-const std::string FILE_PATH = "./history.txt";
+const std::string FILE_PATH = "history.txt";
 const char *LOCALHOST_IP = "127.0.0.1";
 const int LAST_3_DIGITS_YAXING_LI_USC_ID = 475;
 const int SERVER_H_UDP_BASE_PORT = 43000;
@@ -39,7 +39,7 @@ std::string serialize_book_statuses(const std::unordered_map<std::string, int> &
 
 sockaddr_in create_address(int port, const std::string &ip_address = "");
 
-std::string extract_book_code(std::string_view data);
+std::string extract_book_code(const std::string& data);
 
 int getHostPort(int socket_fd);
 

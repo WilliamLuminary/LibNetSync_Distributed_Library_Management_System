@@ -159,7 +159,7 @@ bool client::receiveAuthenticationResult(const string &username) {
 
 void client::handleAuthenticatedTcpCommunication() {
     string bookCode;
-    bool isAdmin = (userName == "Admin"); // You can use a better check here
+    bool isAdmin = (userName == "Admin" || userName == "admin"); // You can use a better check here
 
     while (true) {
         cout << "\n—- Start a new query —-" << endl;
@@ -172,7 +172,7 @@ void client::handleAuthenticatedTcpCommunication() {
             continue;
         }
 
-        if (userName == "Admin")
+        if (isAdmin)
             cout << "Request sent to the Main Server with Admin rights." << endl;
         else cout << userName << " sent the request to the Main Server." << endl;
 

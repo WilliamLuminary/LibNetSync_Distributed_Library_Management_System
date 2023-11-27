@@ -177,12 +177,12 @@ string serialize_book_statuses(const unordered_map<string, int> &bookStatuses) {
     return serializedData.str();
 }
 
-string extract_book_code(std::string_view data) {
+std::string extract_book_code(const std::string& data) {
     if (data.rfind(INVENTORY_QUERY_PREFIX, 0) == 0) {
-        return string(data.substr(INVENTORY_QUERY_PREFIX.length()));
+        return data.substr(INVENTORY_QUERY_PREFIX.length());
     }
     size_t commaPos = data.find(',');
-    return commaPos != string::npos ? string(data.substr(0, commaPos)) : string(data);
+    return commaPos != std::string::npos ? data.substr(0, commaPos) : data;
 }
 
 int getHostPort(int socket_fd) {
