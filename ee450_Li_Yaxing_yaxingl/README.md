@@ -13,6 +13,8 @@ It covers the startup sequence, login and authentication,
 request forwarding, inventory checks, and replies to the client. An extra credit part for inventory management is also
 included.
 
+**This project is based on Apple Silicon M1, and Ubuntu 22.04 ARM.**
+
 ## Code Files
 
 - `serverM.cpp` and `serverM.h`: Main server implementation handling TCP and UDP connections, authentication, and
@@ -66,4 +68,6 @@ specifications and guided by the Beej’s Guide to Network Programming.
 
 ### Extra Credit: Inventory Management
 
-- Implemented inventory management accessible by library staff with credentials (Username: Admin, Password: Admin).
+- Implemented inventory management accessible by library staff with credentials (Username: admin/ Admin, Password: Admin).
+
+  **It works for both `Admin` and `admin`.**
