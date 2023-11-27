@@ -7,9 +7,9 @@ set(CMAKE_CXX_STANDARD 17)
 # target_link_libraries(ServerM some_library)
 # target_link_libraries(client some_library)
 
-add_executable(serverM serverM.cpp
-        serverM.h)
-add_executable(client client.cpp client.h)
-add_executable(serverS serverS.cpp serverS.h)
-add_executable(serverL serverL.cpp serverL.h)
-add_executable(serverH serverH.cpp serverH.h)
+add_executable(serverM ee450_Li_Yaxing_yaxingl/serverM.cpp
+        ee450_Li_Yaxing_yaxingl/serverM.h)
+add_executable(client ee450_Li_Yaxing_yaxingl/client.cpp ee450_Li_Yaxing_yaxingl/client.h)
+add_executable(serverS ee450_Li_Yaxing_yaxingl/serverS.cpp ee450_Li_Yaxing_yaxingl/serverS.h)
+add_executable(serverL ee450_Li_Yaxing_yaxingl/serverL.cpp ee450_Li_Yaxing_yaxingl/serverL.h)
+add_executable(serverH ee450_Li_Yaxing_yaxingl/serverH.cpp ee450_Li_Yaxing_yaxingl/serverH.h)
