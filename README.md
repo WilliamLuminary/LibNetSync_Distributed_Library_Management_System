@@ -1,4 +1,4 @@
-# LibNetSync_Distributed_Library_Management_System
+# LibNetSync Distributed Library Management System
 
 ## Personal Details
 
