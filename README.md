@@ -2,8 +2,8 @@
 
 ## Personal Details
 
-- Full Name: Yaxing Li
-- Student ID: 5487590475
+- Full Name: YL
+- Student ID: **********
 
 ## Project Overview
 
